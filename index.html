@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shivam Parmar | Freelance Developer</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+
+    <style>
+      /* --- CSS VARIABLES (Light Theme Default) --- */
+      :root {
+        --primary-color: #2563eb;
+        --secondary-color: #1e293b;
+        --bg-color: #f8fafc;
+        --card-bg: #ffffff;
+        --text-color: #334155;
+        --text-light: #64748b;
+        --border-color: #e2e8f0;
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        --transition: all 0.3s ease;
+      }
+
+      /* --- DARK THEME VARIABLES --- */
+      body.dark-mode {
+        --primary-color: #3b82f6;
+        --secondary-color: #f1f5f9; /* Headings become light */
+        --bg-color: #0f172a; /* Dark background */
+        --card-bg: #1e293b; /* Darker card background */
+        --text-color: #e2e8f0; /* Light text */
+        --text-light: #94a3b8;
+        --border-color: #334155;
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        line-height: 1.6;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      ul {
+        list-style: none;
+      }
+
+      /* --- HEADER & NAVIGATION --- */
+      header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: var(--card-bg);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        transition: background-color 0.3s ease;
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.2rem 5%;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--secondary-color);
+      }
+
+      .logo span {
+        color: var(--primary-color);
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 1.5rem;
+      }
+
+      .nav-links a {
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: var(--transition);
+        color: var(--text-color);
+      }
+
+      .nav-links a:hover {
+        color: var(--primary-color);
+      }
+
+      /* Theme Toggle Button */
+      .theme-toggle {
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: var(--text-color);
+        transition: var(--transition);
+      }
+      .theme-toggle:hover {
+        color: var(--primary-color);
+        transform: rotate(15deg);
+      }
+
+      .hamburger {
+        display: none;
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: var(--text-color);
+      }
+
+      /* --- HERO SECTION --- */
+      .hero {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 0 5%;
+        /* Gradient overlay for hero */
+        background: linear-gradient(
+          135deg,
+          rgba(37, 99, 235, 0.05) 0%,
+          rgba(0, 0, 0, 0) 100%
+        );
+      }
+
+      .hero-content h3 {
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+      }
+
+      .hero-content h1 {
+        font-size: 3.5rem;
+        color: var(--secondary-color);
+        margin-bottom: 1rem;
+      }
+
+      .hero-content p {
+        font-size: 1.2rem;
+        max-width: 600px;
+        margin: 0 auto 2rem;
+        color: var(--text-light);
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 0.8rem 2rem;
+        border-radius: 5px;
+        font-weight: 600;
+        transition: var(--transition);
+        cursor: pointer;
+        border: none;
+      }
+
+      .btn-primary {
+        background: var(--primary-color);
+        color: #ffffff;
+        margin-right: 1rem;
+      }
+
+      .btn-primary:hover {
+        background: #1d4ed8;
+      }
+
+      .btn-outline {
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+        background: transparent;
+      }
+
+      .btn-outline:hover {
+        background: var(--primary-color);
+        color: #ffffff;
+      }
+
+      /* --- SECTIONS COMMON --- */
+      .section {
+        padding: 5rem 5%;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .section-title {
+        text-align: center;
+        font-size: 2rem;
+        color: var(--secondary-color);
+        margin-bottom: 3rem;
+        position: relative;
+      }
+
+      .section-title::after {
+        content: "";
+        display: block;
+        width: 50px;
+        height: 4px;
+        background: var(--primary-color);
+        margin: 10px auto 0;
+        border-radius: 2px;
+      }
+
+      /* --- ABOUT --- */
+      .about-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+      }
+
+      .about-info h3 {
+        margin-bottom: 1rem;
+        color: var(--secondary-color);
+      }
+      .about-info p {
+        color: var(--text-light);
+      }
+
+      .info-list {
+        margin-top: 1.5rem;
+      }
+
+      .info-list li {
+        margin-bottom: 0.8rem;
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 0.5rem;
+        color: var(--text-light);
+      }
+
+      .info-list span {
+        font-weight: 600;
+        color: var(--secondary-color);
+      }
+
+      /* --- SKILLS --- */
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+      }
+
+      .skill-card {
+        background: var(--card-bg);
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        text-align: center;
+        transition: var(--transition);
+      }
+
+      .skill-card:hover {
+        transform: translateY(-5px);
+      }
+      .skill-card i {
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+      }
+      .skill-card h4 {
+        margin-bottom: 0.5rem;
+        color: var(--secondary-color);
+      }
+      .skill-card p {
+        color: var(--text-light);
+      }
+
+      /* --- PROJECTS SECTION STYLES --- */
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+      }
+
+      .project-card {
+        background: var(--card-bg);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+        border: 1px solid var(--border-color);
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .project-card:hover {
+        transform: translateY(-10px);
+        border-color: var(--primary-color);
+      }
+
+      .project-icon {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+      }
+
+      .project-card h3 {
+        margin-bottom: 1rem;
+        color: var(--secondary-color);
+        font-size: 1.3rem;
+      }
+
+      .project-card p {
+        color: var(--text-light);
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+        flex-grow: 1;
+      }
+
+      .project-link-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 0.7rem 1.2rem;
+        background: var(--primary-color);
+        color: white !important;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: var(--transition);
+        width: 100%;
+      }
+
+      .project-link-btn:hover {
+        background: #1d4ed8;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      }
+
+      /* --- CERTIFICATES STYLES --- */
+      .cert-container {
+        display: flex;
+        justify-content: center;
+      }
+
+      .cert-card {
+        background: var(--card-bg);
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        max-width: 500px;
+        width: 100%;
+        border: 1px solid var(--border-color);
+        margin: 0 auto;
+      }
+
+      .cert-content {
+        padding: 2rem;
+        text-align: center;
+      }
+
+      .cert-image {
+        width: 100%;
+        height: auto;
+        border-bottom: 1px solid var(--border-color);
+        display: block;
+      }
+
+      .cert-title {
+        font-size: 1.5rem;
+        color: var(--secondary-color);
+        margin-bottom: 0.5rem;
+      }
+
+      .cert-issuer {
+        color: var(--text-light);
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+      }
+
+      /* --- CONTACT --- */
+      .contact-container {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 3rem;
+      }
+
+      .contact-info-box {
+        background: var(--card-bg);
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+      }
+
+      .contact-item {
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .contact-item i {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+      }
+      .contact-item h4 {
+        color: var(--secondary-color);
+      }
+      .contact-item p {
+        color: var(--text-light);
+      }
+
+      .social-links {
+        margin-top: 2rem;
+        display: flex;
+        gap: 1rem;
+      }
+      .social-links a {
+        width: 40px;
+        height: 40px;
+        background: var(--bg-color);
+        color: var(--text-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: var(--transition);
+        border: 1px solid var(--border-color);
+      }
+      .social-links a:hover {
+        background: var(--primary-color);
+        color: #ffffff;
+        border-color: var(--primary-color);
+      }
+
+      .contact-form input,
+      .contact-form textarea {
+        width: 100%;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+        border-radius: 5px;
+        font-size: 1rem;
+      }
+
+      .contact-form input:focus,
+      .contact-form textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+      }
+
+      /* --- WHATSAPP FLOAT BUTTON --- */
+      .whatsapp-float {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background-color: #25d366;
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        z-index: 2000;
+        transition: var(--transition);
+      }
+
+      .whatsapp-float:hover {
+        transform: scale(1.1);
+        background-color: #20ba5a;
+      }
+
+      /* --- FOOTER --- */
+      footer {
+        background: var(--secondary-color); /* Always darkish in light mode */
+        color: #ffffff;
+        text-align: center;
+        padding: 2rem;
+        margin-top: 4rem;
+      }
+
+      /* Dark mode adjustment for footer */
+      body.dark-mode footer {
+        background: #020617;
+      }
+
+      /* --- RESPONSIVE DESIGN --- */
+      @media (max-width: 768px) {
+        .navbar {
+          padding: 1rem;
+        }
+        .hamburger {
+          display: block;
+        }
+
+        .nav-actions {
+          position: fixed;
+          top: 70px;
+          right: -100%;
+          width: 100%;
+          background: var(--card-bg);
+          flex-direction: column;
+          text-align: center;
+          padding: 2rem 0;
+          box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+          transition: var(--transition);
+        }
+
+        .nav-actions.active {
+          right: 0;
+        }
+        .nav-links {
+          flex-direction: column;
+          gap: 1.5rem;
+          margin-bottom: 1.5rem;
+        }
+        .hero-content h1 {
+          font-size: 2.5rem;
+        }
+        .about-container,
+        .contact-container {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <a href="#" class="logo"><span>Shivam Parmar</span></a>
+
+        <div class="hamburger">
+          <i class="fas fa-bars"></i>
+        </div>
+
+        <div class="nav-actions">
+          <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#certificates">Certificates</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+
+          <div
+            class="theme-toggle"
+            id="theme-toggle"
+            title="Toggle Dark/Light Mode"
+          >
+            <i class="fas fa-moon"></i>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <section id="home" class="hero">
+      <div class="hero-content">
+        <h3>Hello, I am</h3>
+        <h1>Shivam Parmar</h1>
+        <p>
+          A passionate <strong>Freelancer</strong> specializing in Full Stack
+          Development. Creating professional solutions for the web.
+        </p>
+        <a href="#projects" class="btn btn-primary">View Work</a>
+        <a href="resume.pdf" download class="btn btn-outline">Download CV</a>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <h2 class="section-title">About Me</h2>
+      <div class="about-container">
+        <img
+          src="photo.jpg"
+          alt="Shivam Parmar"
+          style="
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 50px;
+            box-shadow: var(--shadow);
+          "
+        />
+
+        <div class="about-info">
+          <h3>Full Stack Developer & Freelancer</h3>
+          <p>
+            I am a dedicated developer with mastery in multiple technologies. I
+            build scalable web applications and intuitive user interfaces using
+            modern tools and best practices.
+          </p>
+
+          <ul class="info-list">
+            <li><span>Age:</span> 23</li>
+            <li><span>Living In:</span> NAGDA JN.</li>
+            <li><span>Status:</span> Unmarried</li>
+            <li><span>Experience:</span> Freelancer</li>
+            <li><span>Email:</span> Shivaaay332@gmail.com</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="section">
+      <h2 class="section-title">My Expertise</h2>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <i class="fas fa-laptop-code"></i>
+          <h4>Web Development</h4>
+          <p>
+            Building responsive websites using HTML, CSS, and Modern Frameworks.
+          </p>
+        </div>
+
+        <div class="skill-card">
+          <i class="fab fa-python"></i>
+          <h4>Python</h4>
+          <p>Scripting, automation, and backend logic development.</p>
+        </div>
+
+        <div class="skill-card">
+          <i class="fab fa-js"></i>
+          <h4>Frontend Dev</h4>
+          <p>Interactive interfaces with JavaScript and frontend libraries.</p>
+        </div>
+
+        <div class="skill-card">
+          <i class="fas fa-server"></i>
+          <h4>Backend Dev</h4>
+          <p>Server-side logic, API integration, and security.</p>
+        </div>
+
+        <div class="skill-card">
+          <i class="fas fa-database"></i>
+          <h4>Databases</h4>
+          <p>Managing data storage and retrieval efficiently.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="section">
+      <h2 class="section-title">My Projects</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <div class="project-top">
+            <i class="fas fa-file-alt project-icon"></i>
+            <h3>Freshers Resume Maker</h3>
+            <p>
+              A smart tool built with Streamlit to help freshers create
+              professional resumes quickly and easily.
+            </p>
+          </div>
+          <a
+            href="https://freshers-resume-maker.streamlit.app/"
+            target="_blank"
+            class="project-link-btn"
+          >
+            Live Demo <i class="fas fa-external-link-alt"></i>
+          </a>
+        </div>
+
+        <div class="project-card">
+          <div class="project-top">
+            <i class="fas fa-comments project-icon"></i>
+            <h3>Web Phantom Chat</h3>
+            <p>
+              A real-time messaging application with a sleek interface for
+              seamless communication and connectivity.
+            </p>
+          </div>
+          <a
+            href="https://webphantomchat.netlify.app/"
+            target="_blank"
+            class="project-link-btn"
+          >
+            Live Demo <i class="fas fa-external-link-alt"></i>
+          </a>
+        </div>
+
+        <div class="project-card">
+          <div class="project-top">
+            <i class="fas fa-music project-icon"></i>
+            <h3>iTune Player</h3>
+            <p>
+              A web-based music player with a beautiful UI, featuring play,
+              pause, track management, and smooth controls.
+            </p>
+          </div>
+          <a
+            href="https://ituneplayer.netlify.app/"
+            target="_blank"
+            class="project-link-btn"
+          >
+            Live Demo <i class="fas fa-external-link-alt"></i>
+          </a>
+        </div>
+
+        <div class="project-card">
+          <div class="project-top">
+            <i class="fas fa-user-lock project-icon"></i>
+            <h3>Calculator Lock</h3>
+            <p>
+              A secure privacy vault disguised as a functional calculator to hide
+              and protect sensitive files or data.
+            </p>
+          </div>
+          <a
+            href="https://calculatorlock.netlify.app/"
+            target="_blank"
+            class="project-link-btn"
+          >
+            Live Demo <i class="fas fa-external-link-alt"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="certificates" class="section">
+      <h2 class="section-title">Certifications</h2>
+      <div class="cert-container">
+        <div class="cert-card">
+          <img
+            src="scientific-computing-with-python-v7.jpeg"
+            alt="Scientific Computing with Python Certificate"
+            class="cert-image"
+          />
+          <div class="cert-content">
+            <h3 class="cert-title">Scientific Computing with Python</h3>
+            <p class="cert-issuer">Issued by freeCodeCamp</p>
+            <a
+              href="https://www.freecodecamp.org/certification/shivaaay_p332/scientific-computing-with-python-v7"
+              target="_blank"
+              class="btn btn-outline"
+            >
+              Verify Credential <i class="fas fa-check-circle"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <h2 class="section-title">Contact Me</h2>
+      <div class="contact-container">
+        <div class="contact-info-box">
+          <h3>Get in Touch</h3>
+          <p style="margin-bottom: 2rem; color: var(--text-light)">
+            Feel free to contact me for freelance projects or collaborations.
+          </p>
+
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+              <h4>Location</h4>
+              <p>NAGDA JN.</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <h4>Email</h4>
+              <p>Shivaaay332@gmail.com</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <i class="fas fa-phone-alt"></i>
+            <div>
+              <h4>Phone</h4>
+              <p>+917389286618</p>
+            </div>
+          </div>
+
+          <div class="social-links">
+            <a
+              href="https://linkedin.com/in/shivam-parmar-10026a228"
+              target="_blank"
+              ><i class="fab fa-linkedin-in"></i
+            ></a>
+            <a href="https://github.com/Shivaaay332" target="_blank"
+              ><i class="fab fa-github"></i
+            ></a>
+          </div>
+        </div>
+
+        <form class="contact-form">
+          <input type="text" placeholder="Your Name" required />
+          <input type="email" placeholder="Your Email" required />
+          <input type="text" placeholder="Subject" />
+          <textarea rows="5" placeholder="Message" required></textarea>
+          <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+      </div>
+    </section>
+
+    <a
+      href="https://wa.me/+917389286618"
+      class="whatsapp-float"
+      target="_blank"
+      title="Chat on WhatsApp"
+    >
+      <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer>
+      <p>&copy; 2026 Shivam Parmar. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+      // --- 1. Mobile Navigation Toggle ---
+      const hamburger = document.querySelector(".hamburger");
+      const navActions = document.querySelector(".nav-actions");
+
+      hamburger.addEventListener("click", () => {
+        navActions.classList.toggle("active");
+      });
+
+      // --- 2. Theme Toggle Logic ---
+      const themeToggle = document.getElementById("theme-toggle");
+      const themeIcon = themeToggle.querySelector("i");
+      const body = document.body;
+
+      // Check for saved user preference
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        body.classList.add("dark-mode");
+        themeIcon.classList.remove("fa-moon");
+        themeIcon.classList.add("fa-sun");
+      }
+
+      themeToggle.addEventListener("click", () => {
+        body.classList.toggle("dark-mode");
+
+        // Switch Icons and Save Preference
+        if (body.classList.contains("dark-mode")) {
+          themeIcon.classList.remove("fa-moon");
+          themeIcon.classList.add("fa-sun");
+          localStorage.setItem("theme", "dark");
+        } else {
+          themeIcon.classList.remove("fa-sun");
+          themeIcon.classList.add("fa-moon");
+          localStorage.setItem("theme", "light");
+        }
+      });
+
+      // --- 3. Smooth Scrolling & Close Mobile Menu ---
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const targetId = this.getAttribute("href");
+          const targetSection = document.querySelector(targetId);
+
+          if (targetSection) {
+            targetSection.scrollIntoView({
+              behavior: "smooth",
+            });
+            // Close mobile menu
+            if (navActions.classList.contains("active")) {
+              navActions.classList.remove("active");
+            }
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
