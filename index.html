@@ -14,24 +14,23 @@
        THEME VARIABLES (No Pure White/Black, Highly Readable)
        ========================================= */
        
-    /* 1. NIGHT THEME (Dark Blue & Silver, Mountains, River) */
+    /* 1. NIGHT THEME */
     body.theme-night {
-      --primary-color: #3b82f6;
-      --secondary-color: #f1f5f9;
-      --bg-color: #0f172a;
-      --card-bg: #1e293b;
+      --primary-color: #90caf9;
+      --secondary-color: #e3f2fd;
+      --bg-color: linear-gradient(to bottom, #0a192f, #172a45, #112240);
+      --card-bg: rgba(10, 25, 47, 0.95);
       --text-main: #f0f4f8;
       --text-muted: #a8b2d1;
-      --border-color: #334155;
-      --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      --border-color: rgba(144, 202, 249, 0.4);
+      --shadow-color: rgba(2, 12, 27, 0.8);
       --btn-text-color: #0a192f;
-      --laser-color: 144, 202, 249; /* RGB for cursor */
+      --laser-color: 144, 202, 249;
     }
-    
 
-    /* 2. DAY THEME (Sky Blue, Light Yellow, Sun, Desert) */
+    /* 2. DAY THEME */
     body.theme-day {
-      --primary-color: #f57f17; /* Sun Yellow/Orange */
+      --primary-color: #f57f17;
       --secondary-color: #0277bd;
       --bg-color: linear-gradient(to bottom, #81d4fa, #b3e5fc, #fff9c4);
       --card-bg: rgba(240, 248, 255, 0.92);
@@ -43,9 +42,9 @@
       --laser-color: 245, 127, 23; 
     }
 
-    /* 3. NATURE THEME (Leaf Green, Waterfall, Big Birds) */
+    /* 3. NATURE THEME */
     body.theme-nature {
-      --primary-color: #c0ca33; /* Light Leaf Green */
+      --primary-color: #c0ca33;
       --secondary-color: #f1f8e9;
       --bg-color: linear-gradient(to bottom, #1b5e20, #2e7d32, #4caf50);
       --card-bg: rgba(27, 94, 32, 0.95);
@@ -57,10 +56,10 @@
       --laser-color: 192, 202, 51;
     }
 
-    /* 4. PARTY THEME (Pub Lights, Deep Violet/Blue) */
+    /* 4. PARTY THEME */
     body.theme-party {
-      --primary-color: #e040fb; /* Neon Purple */
-      --secondary-color: #18ffff; /* Neon Cyan */
+      --primary-color: #e040fb;
+      --secondary-color: #18ffff;
       --bg-color: linear-gradient(to bottom, #120024, #2a004f, #0d001a);
       --card-bg: rgba(18, 0, 36, 0.95);
       --text-main: #f3e5f5;
@@ -77,7 +76,7 @@
     * {
       margin: 0; padding: 0; box-sizing: border-box;
       font-family: "Poppins", sans-serif;
-      cursor: none !important; /* Forces custom cursor globally */
+      cursor: none !important;
     }
 
     html { scroll-behavior: smooth; }
@@ -88,28 +87,24 @@
       overflow-x: hidden; min-height: 100vh;
     }
 
-    a, button { text-decoration: none; color: inherit; }
+    a, button, input, textarea { text-decoration: none; color: inherit; cursor: none !important; }
     ul { list-style: none; }
 
     /* --- CANVAS LAYERS --- */
-    /* Scenery CSS Container (Mountains, Sun, Desert) */
     #scenery-layer {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       z-index: -3; pointer-events: none; transition: 1s ease;
     }
-    /* Dynamic Animation Canvas (Birds, Water, Stars, Lights) */
     #animation-canvas {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       z-index: -2; pointer-events: none;
     }
-    /* Laser Cursor Canvas */
     #cursor-canvas {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       z-index: 10000; pointer-events: none;
     }
 
     /* --- CSS SCENERY ELEMENTS --- */
-    /* Night: Mountains & River */
     .scenery-night-mountains {
       position: absolute; bottom: 15vh; width: 100%; height: 40vh;
       background: #172a45; clip-path: polygon(0% 100%, 20% 40%, 40% 100%, 60% 20%, 80% 80%, 100% 30%, 100% 100%);
@@ -119,7 +114,6 @@
       position: absolute; bottom: 0; width: 100%; height: 15vh;
       background: linear-gradient(to bottom, #90caf9, #0a192f); opacity: 0; transition: opacity 1s;
     }
-    /* Day: Sun & Desert */
     .scenery-day-sun {
       position: absolute; top: 10vh; right: 15vw; width: 150px; height: 150px;
       background: #fff59d; border-radius: 50%; box-shadow: 0 0 60px 30px rgba(253, 216, 53, 0.4);
@@ -221,7 +215,6 @@
       height: 100vh; display: flex; align-items: center; justify-content: center;
       text-align: center; padding: 0 5%; position: relative; z-index: 2;
     }
-    /* SOLID Glass effect to ensure readability */
     .hero-glass {
       background: var(--card-bg); padding: 3rem; border-radius: 15px;
       border: 1px solid var(--border-color); box-shadow: 0 10px 40px var(--shadow-color);
@@ -272,27 +265,53 @@
     .skill-tags span { background: var(--border-color); padding: 4px 10px; border-radius: 5px; font-size: 0.75rem; font-weight: 600;}
 
     /* =========================================
-       PROJECTS SECTION
+       PROJECTS SECTION (Fixed to 1 Live + rest Local folders)
        ========================================= */
-    .filter-container { display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap;}
+    .projects-controls {
+      display: flex; flex-direction: column; align-items: center; gap: 20px; margin-bottom: 3rem;
+    }
+    
+    .search-bar {
+      width: 100%; max-width: 600px; padding: 15px 25px; border-radius: 30px;
+      border: 2px solid var(--border-color); background-color: var(--card-bg);
+      color: var(--text-main); font-size: 1.05rem; outline: none; transition: 0.3s;
+      box-shadow: 0 5px 15px var(--shadow-color);
+    }
+    .search-bar::placeholder { color: var(--text-muted); }
+    .search-bar:focus { border-color: var(--primary-color); box-shadow: 0 0 15px var(--border-color); }
+
+    .filter-container { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;}
     .filter-btn {
       padding: 0.6rem 1.5rem; border: 1px solid var(--primary-color); background: var(--card-bg);
-      color: var(--text-main); border-radius: 8px; font-weight: 600; transition: 0.3s;
+      color: var(--text-main); border-radius: 20px; font-weight: 600; transition: 0.3s;
     }
     .filter-btn.active, .filter-btn:hover { background: var(--primary-color); color: var(--btn-text-color); }
 
     .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; }
+    
     .project-card {
       background: var(--card-bg); border-radius: 15px; box-shadow: 0 10px 40px var(--shadow-color);
       border: 1px solid var(--border-color); padding: 2.5rem; display: flex; flex-direction: column;
-      transition: transform 0.2s, opacity 0.4s;
+      align-items: center; text-align: center; position: relative;
+      transition: transform 0.2s, opacity 0.4s; overflow: hidden;
     }
-    .project-card.hide { display: none; }
     .project-card:hover { transform: translateY(-5px); border-color: var(--primary-color); }
-    .project-icon { font-size: 3rem; color: var(--primary-color); margin-bottom: 1.5rem; }
-    .project-card h3 { margin-bottom: 1rem; color: var(--secondary-color); font-size: 1.4rem; }
-    .project-card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; flex-grow: 1; }
-    .project-link-btn { width: 100%; }
+    
+    .badge-container { position: absolute; top: 15px; right: 15px; }
+    .badge {
+      background-color: var(--primary-color); color: var(--btn-text-color);
+      font-size: 0.7rem; padding: 5px 10px; border-radius: 12px; font-weight: bold; text-transform: uppercase;
+    }
+
+    .project-icon { font-size: 3rem; color: var(--primary-color); margin-bottom: 1.5rem; margin-top: 10px;}
+    .project-card h3 { margin-bottom: 1rem; color: var(--secondary-color); font-size: 1.4rem; font-weight: 700;}
+    .project-card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; flex-grow: 1; line-height: 1.5;}
+    .project-link-btn { width: 100%; border-radius: 50px; }
+    
+    #no-results {
+      display: none; text-align: center; width: 100%; font-size: 1.2rem;
+      color: var(--text-muted); padding: 2rem; font-weight: 600;
+    }
 
     /* =========================================
        CERTIFICATES
@@ -368,7 +387,7 @@
       .nav-links { flex-direction: column; gap: 1.5rem; margin-bottom: 2rem; }
       .hero-content h1 { font-size: 2.8rem; }
       .about-container, .contact-container { grid-template-columns: 1fr; text-align: center;}
-      .profile-img { width: 250px; height: 250px; }
+      .profile-img { width: 250px; height: 250px; margin: 0 auto; display: block;}
       .info-list li { flex-direction: column; text-align: center; border-bottom: none;}
       .contact-item { flex-direction: column; text-align: center;}
       .social-links { justify-content: center;}
@@ -436,7 +455,7 @@
     <div class="about-container">
       
       <div class="profile-img-wrapper">
-        <img src="Photo.jpg" alt="Shivam Parmar" class="profile-img" />
+        <img src="photo.jpg" alt="Shivam Parmar" class="profile-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4140/4140048.png'" />
         <div class="terminal-box">
           <div class="terminal-header">
             <div class="term-dot" style="background:#ef4444"></div>
@@ -519,52 +538,119 @@
   </section>
 
   <section id="projects" class="section reveal">
-    <h2 class="section-title">Featured Projects</h2>
+    <h2 class="section-title">My Project Library</h2>
     
-    <div class="filter-container">
-      <button class="filter-btn active" data-filter="all">All Projects</button>
-      <button class="filter-btn" data-filter="game">Interactive Games</button>
-      <button class="filter-btn" data-filter="web">Web Applications</button>
+    <div class="projects-controls">
+      <input type="text" id="searchInput" class="search-bar" placeholder="Search projects (e.g., Ludo, Typing)...">
+      
+      <div class="filter-container">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="game">Games</button>
+        <button class="filter-btn" data-filter="app">Apps</button>
+        <button class="filter-btn" data-filter="puzzle">Puzzles</button>
+      </div>
     </div>
 
-    <div class="projects-grid">
+    <div class="projects-grid" id="projectsGrid">
       
       <div class="project-card" data-category="game">
+        <div class="badge-container"><span class="badge">Live Game</span></div>
         <i class="fas fa-dice project-icon"></i>
         <h3>Ludo Pro Max</h3>
         <p>Engineered a fully interactive multiplayer Ludo game using JavaScript. Features complex logic, safe zones, win conditions, and smooth DOM animations.</p>
-        <a href="https://ludopromax.onrender.com/" target="_blank" class="btn btn-outline project-link-btn">
-          Play Live <i class="fas fa-external-link-alt"></i>
-        </a>
-      </div>
-
-      <div class="project-card" data-category="web">
-        <i class="fas fa-photo-video project-icon"></i>
-        <h3>Dream Projects Library</h3>
-        <p>Developed a centralized digital repository to host, manage, and showcase a diverse collection of scalable web applications and developer tools.</p>
-        <a href="https://shivaaay332.github.io/Dream-Project-Library/" target="_blank" class="btn btn-outline project-link-btn">
-          View Library <i class="fas fa-external-link-alt"></i>
-        </a>
-      </div>
-
-      <div class="project-card" data-category="web">
-        <i class="fas fa-laptop-code project-icon"></i>
-        <h3>Modern Portfolio</h3>
-        <p>Designed a highly responsive personal portfolio utilizing Tailwind CSS to showcase technical projects, featuring a clean, mobile-first UI.</p>
-        <a href="https://shivaaay332.github.io/Portfolio-website/" target="_blank" class="btn btn-outline project-link-btn">
-          View Site <i class="fas fa-external-link-alt"></i>
-        </a>
+        <a href="https://ludopromax.onrender.com/" target="_blank" class="btn btn-outline project-link-btn">Play Live <i class="fas fa-external-link-alt"></i></a>
       </div>
 
       <div class="project-card" data-category="game">
-        <i class="fas fa-gamepad project-icon"></i>
-        <h3>Classic Hangman</h3>
-        <p>Programmed an interactive Hangman game focusing on advanced string manipulation, preventing repeated key presses, and real-time state management.</p>
-        <a href="https://shivaaay332.github.io/Hangman-Game/" target="_blank" class="btn btn-outline project-link-btn">
-          Play Live <i class="fas fa-external-link-alt"></i>
-        </a>
+        <div class="badge-container"><span class="badge">Game</span></div>
+        <i class="fas fa-dice-d20 project-icon"></i>
+        <h3>Ultimate Ludo Pro</h3>
+        <p>Real 3D tokens, gaming room vibe, and smart AI strategy.</p>
+        <a href="Ludogame/index.html" class="btn btn-outline project-link-btn">Play Game</a>
       </div>
+
+      <div class="project-card" data-category="game">
+        <div class="badge-container"><span class="badge">Game</span></div>
+        <i class="fas fa-user-injured project-icon"></i>
+        <h3>Hangman</h3>
+        <p>Word guessing game. Save the man with your vocabulary skills!</p>
+        <a href="Hangman/index.html" class="btn btn-outline project-link-btn">Play Game</a>
+      </div>
+
+      <div class="project-card" data-category="puzzle">
+        <div class="badge-container"><span class="badge" style="background:#e040fb;">Puzzle</span></div>
+        <i class="fas fa-brain project-icon"></i>
+        <h3>Mind Game</h3>
+        <p>Test your memory power with this engaging card matching puzzle.</p>
+        <a href="MindGame/index.html" class="btn btn-outline project-link-btn">Play Game</a>
+      </div>
+
+      <div class="project-card" data-category="game">
+        <div class="badge-container"><span class="badge">Game</span></div>
+        <i class="fas fa-chess-knight project-icon"></i>
+        <h3>ChessMaster</h3>
+        <p>Challenge an Expert AI and test your strategic thinking on the board.</p>
+        <a href="ChessMaster/index.html" class="btn btn-outline project-link-btn">Play Game</a>
+      </div>
+
+      <div class="project-card" data-category="game">
+        <div class="badge-container"><span class="badge">Game</span></div>
+        <i class="fas fa-times project-icon"></i>
+        <h3>Tic Tac Toe</h3>
+        <p>The classic X vs O strategy game crafted with a beautiful modern UI.</p>
+        <a href="TicTacToe/index.html" class="btn btn-outline project-link-btn">Play Game</a>
+      </div>
+
+      <div class="project-card" data-category="puzzle">
+        <div class="badge-container"><span class="badge" style="background:#e040fb;">Puzzle</span></div>
+        <i class="fas fa-puzzle-piece project-icon"></i>
+        <h3>Maze Puzzle</h3>
+        <p>Solve the complex maze path and find your way out to win.</p>
+        <a href="MazeGame/index.html" class="btn btn-outline project-link-btn">Play Game</a>
+      </div>
+
+      <div class="project-card" data-category="game">
+        <div class="badge-container"><span class="badge">Game</span></div>
+        <i class="fas fa-car-side project-icon"></i>
+        <h3>Speed Racer Pro</h3>
+        <p>Dodge traffic, collect fuel & beat the High Score! Real Graphics included.</p>
+        <a href="CarGame/index.html" class="btn btn-outline project-link-btn">Play Now</a>
+      </div>
+
+      <div class="project-card" data-category="game">
+        <div class="badge-container"><span class="badge">Game</span></div>
+        <i class="fas fa-rocket project-icon"></i>
+        <h3>Space Waves</h3>
+        <p>Hold to fly Up, release to Dive. Slide on walls, dodge spikes & beat the high score!</p>
+        <a href="SpaceWaves/index.html" class="btn btn-outline project-link-btn">Play Now</a>
+      </div>
+
+      <div class="project-card" data-category="game">
+        <div class="badge-container"><span class="badge">Game</span></div>
+        <i class="fas fa-dragon project-icon"></i>
+        <h3>Ultimate Snake Pro</h3>
+        <p>Eat Food, dodge Poison, grab Power-ups & unlock new Levels!</p>
+        <a href="snake_final/index.html" class="btn btn-outline project-link-btn">Play Now</a>
+      </div>
+
+      <div class="project-card" data-category="puzzle">
+        <div class="badge-container"><span class="badge" style="background:#e040fb;">Puzzle</span></div>
+        <i class="fas fa-border-all project-icon"></i>
+        <h3>Master Sudoku</h3>
+        <p>Classic logic puzzle with Neon Theme, Undo, Hints, Notes & Timer features.</p>
+        <a href="SudokuGame/index.html" class="btn btn-outline project-link-btn">Play Now</a>
+      </div>
+
+      <div class="project-card" data-category="app">
+        <div class="badge-container"><span class="badge" style="background:#4caf50;">App</span></div>
+        <i class="fas fa-keyboard project-icon"></i>
+        <h3>TypeMaster</h3>
+        <p>Test and improve your typing speed and accuracy with real-time feedback.</p>
+        <a href="TypeMaster/index.html" class="btn btn-outline project-link-btn">Open App</a>
+      </div>
+
     </div>
+    <div id="no-results">No projects found matching your search.</div>
   </section>
 
   <section id="certificates" class="section reveal">
@@ -614,7 +700,7 @@
         </div>
       </div>
 
-      <form class="contact-form" id="contactForm" action="https://formspree.io/f/xwvnwryy" method="POST">
+      <form class="contact-form" id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
         <input type="text" name="name" placeholder="Full Name" required />
         <input type="email" name="email" placeholder="Email Address" required />
         <input type="text" name="subject" placeholder="Subject" />
@@ -672,10 +758,10 @@
        3. 4-THEME CYCLING LOGIC
        ========================================= */
     const themes = [
-      { id: 'night', icon: 'fas fa-moon' },      // Dark blue/silver, mountains, river, shooting stars
-      { id: 'day', icon: 'fas fa-sun' },         // Sky blue, sun, desert, clean
-      { id: 'nature', icon: 'fas fa-leaf' },     // Green, waterfall, big birds
-      { id: 'party', icon: 'fas fa-music' }      // Pub lights, lasers
+      { id: 'night', icon: 'fas fa-moon' },      
+      { id: 'day', icon: 'fas fa-sun' },         
+      { id: 'nature', icon: 'fas fa-leaf' },     
+      { id: 'party', icon: 'fas fa-music' }      
     ];
     
     let currentThemeIndex = 0;
@@ -732,14 +818,11 @@
     function animateCursor() {
       cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
       
-      // Add current position to trail
       cursorTrail.push({ x: mouseX, y: mouseY });
-      // Keep trail around 1-2 seconds long (approx 40 frames)
       if (cursorTrail.length > 40) cursorTrail.shift();
 
       const laserColor = getLaserColor();
 
-      // Draw trail
       if (cursorTrail.length > 1) {
         cursorCtx.beginPath();
         for (let i = 0; i < cursorTrail.length; i++) {
@@ -750,7 +833,6 @@
         cursorCtx.lineCap = 'round';
         cursorCtx.lineJoin = 'round';
         
-        // Gradient for fading laser tail
         const gradient = cursorCtx.createLinearGradient(
           cursorTrail[0].x, cursorTrail[0].y, 
           cursorTrail[cursorTrail.length-1].x, cursorTrail[cursorTrail.length-1].y
@@ -763,7 +845,6 @@
         cursorCtx.stroke();
       }
 
-      // Draw glowing head
       cursorCtx.beginPath();
       cursorCtx.arc(mouseX, mouseY, 4, 0, Math.PI * 2);
       cursorCtx.fillStyle = '#fff';
@@ -782,7 +863,6 @@
     const animCanvas = document.getElementById('animation-canvas');
     const animCtx = animCanvas.getContext('2d');
     let animationElements = [];
-    let animationTimer = 0;
 
     function resizeAnimCanvas() {
       animCanvas.width = window.innerWidth;
@@ -796,34 +876,31 @@
       const theme = themes[currentThemeIndex].id;
 
       if(theme === 'nature') {
-        // Add 3-4 Large Love Birds
         const numBirds = 3 + Math.floor(Math.random()*2);
         for(let i=0; i<numBirds; i++) {
           animationElements.push({
             type: 'bird',
             x: Math.random() * animCanvas.width,
             y: Math.random() * (animCanvas.height/2),
-            size: animCanvas.width * 0.05, // 5% of screen size
+            size: animCanvas.width * 0.05, 
             speed: 1.5 + Math.random(),
             wingFlap: Math.random() * Math.PI
           });
         }
-        // Add waterfall particles
         for(let i=0; i<50; i++) {
           animationElements.push({
             type: 'water',
-            x: animCanvas.width * 0.8 + (Math.random()*100 - 50), // Waterfall on right side
+            x: animCanvas.width * 0.8 + (Math.random()*100 - 50), 
             y: Math.random() * animCanvas.height,
             speed: 4 + Math.random()*3,
             length: 20 + Math.random()*30
           });
         }
       } else if (theme === 'party') {
-        // Spotlights
         for(let i=0; i<3; i++) {
           animationElements.push({
             type: 'spotlight',
-            x: animCanvas.width * (i*0.5), // Left, center, right
+            x: animCanvas.width * (i*0.5), 
             y: animCanvas.height,
             angle: Math.PI/2,
             swingSpeed: 0.01 + Math.random()*0.01,
@@ -836,10 +913,8 @@
     function animateBackground() {
       animCtx.clearRect(0, 0, animCanvas.width, animCanvas.height);
       const theme = themes[currentThemeIndex].id;
-      animationTimer++;
 
       if(theme === 'night') {
-        // Spawn 1-2 shooting stars occasionally (every ~200 frames = ~3-4 seconds)
         if(Math.random() < 0.005 && animationElements.length < 2) {
           animationElements.push({
             type: 'star',
@@ -890,17 +965,14 @@
             if(el.x > animCanvas.width + el.size) el.x = -el.size;
             el.wingFlap += 0.1;
             
-            // Draw simple large bird shape
             animCtx.save();
             animCtx.translate(el.x, el.y);
             animCtx.fillStyle = 'rgba(255,255,255,0.8)';
             animCtx.beginPath();
-            // Left wing
             let wingY = Math.sin(el.wingFlap) * (el.size/3);
             animCtx.moveTo(0, 0);
             animCtx.quadraticCurveTo(-el.size/2, wingY - el.size/4, -el.size, wingY);
             animCtx.quadraticCurveTo(-el.size/2, 0, 0, el.size/5);
-            // Right wing
             animCtx.quadraticCurveTo(el.size/2, 0, el.size, wingY);
             animCtx.quadraticCurveTo(el.size/2, wingY - el.size/4, 0, 0);
             animCtx.fill();
@@ -913,7 +985,6 @@
         animCtx.globalCompositeOperation = 'screen';
         for(let el of animationElements) {
           el.angle += el.swingSpeed;
-          // Sweep back and forth
           let currentAngle = Math.PI/2 + Math.sin(el.angle) * 0.8;
           
           animCtx.beginPath();
@@ -962,26 +1033,50 @@
     setTimeout(typeEffect, 1500);
 
     /* =========================================
-       7. PROJECT FILTER
+       7. PROJECT FILTER & SEARCH LOGIC
        ========================================= */
+    const searchInput = document.getElementById('searchInput');
     const filterBtns = document.querySelectorAll('.filter-btn');
     const cards = document.querySelectorAll('.project-card');
+    const noResultsMsg = document.getElementById('no-results');
     
+    function filterProjects() {
+      const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+      const activeBtn = document.querySelector('.filter-btn.active');
+      const activeFilter = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const title = card.querySelector('h3').innerText.toLowerCase();
+        const desc = card.querySelector('p').innerText.toLowerCase();
+        const category = card.getAttribute('data-category');
+
+        const matchesSearch = title.includes(searchTerm) || desc.includes(searchTerm);
+        const matchesFilter = activeFilter === 'all' || category.includes(activeFilter);
+
+        if (matchesSearch && matchesFilter) {
+          card.style.display = 'flex';
+          setTimeout(() => card.style.opacity = '1', 50);
+          visibleCount++;
+        } else {
+          card.style.opacity = '0';
+          setTimeout(() => card.style.display = 'none', 300);
+        }
+      });
+
+      setTimeout(() => {
+        if (visibleCount === 0) noResultsMsg.style.display = 'block';
+        else noResultsMsg.style.display = 'none';
+      }, 350);
+    }
+
+    if(searchInput) searchInput.addEventListener('input', filterProjects);
+
     filterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         filterBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        const filter = btn.getAttribute('data-filter');
-        
-        cards.forEach(card => {
-          if (filter === 'all' || card.getAttribute('data-category') === filter) {
-            card.style.display = 'flex';
-            setTimeout(() => card.style.opacity = '1', 50);
-          } else {
-            card.style.opacity = '0';
-            setTimeout(() => card.style.display = 'none', 300);
-          }
-        });
+        filterProjects();
       });
     });
 
@@ -1006,4 +1101,3 @@
   </script>
 </body>
 </html>
-
