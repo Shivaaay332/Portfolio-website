@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tic-Tac-Toe Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Permanent Dark Mode Variables */
+            --bg-color: #18191a;
+            --container-bg: #242526;
+            --text-color: #e4e6eb;
+            --cell-bg: #3a3b3c;
+            --cell-hover: #4e4f50;
+            --primary: #4e54c8;
+            --accent: #8f94fb;
+            --x-color: #ff4757;
+            --o-color: #2ed573;
+            --shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+            overflow: hidden; /* Prevents scrolling on mobile */
+            touch-action: manipulation; /* Prevents double-tap zoom */
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: center;
+            width: 90%;
+            max-width: 400px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Scoreboard */
+        .scoreboard {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+            max-width: 350px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .player { display: flex; flex-direction: column; align-items: center; }
+        .score { font-size: 1.5rem; }
+        .rounds-info { display: flex; align-items: center; font-size: 0.9rem; color: #aaa; }
+
+        /* Board - Responsive for Mobile */
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 10px;
+            background: var(--container-bg);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            width: 85vw;
+            max-width: 350px;
+            height: 85vw;
+            max-height: 350px;
+            box-sizing: border-box;
+        }
+
+        .cell {
+            width: 100%;
+            height: 100%;
+            background: var(--cell-bg);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .cell:hover {
+            background: var(--cell-hover);
+        }
+
+        .cell.x { color: var(--x-color); }
+        .cell.o { color: var(--o-color); }
+
+        /* Controls & Buttons */
+        .controls { margin-top: 15px; display: flex; gap: 10px; }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.1s;
+        }
+        .btn:active { transform: scale(0.95); }
+        .btn.primary { background: var(--primary); color: white; }
+        .btn.secondary { background: var(--cell-bg); color: var(--text-color); }
+
+        #status-msg {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            height: 24px;
+            text-align: center;
+        }
+
+        /* Play Again Button */
+        #play-again-btn {
+            display: none;
+            margin-top: 15px;
+            width: 85vw;
+            max-width: 350px;
+            font-size: 1.2rem;
+            padding: 12px;
+            background: var(--o-color); /* Greenish color to stand out */
+            color: #18191a;
+        }
+
+        /* Modal (Settings) */
+        .modal {
+            display: none; 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center; align-items: center;
+            z-index: 10;
+        }
+        .modal-content {
+            background: var(--container-bg);
+            padding: 20px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
+            box-sizing: border-box;
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .btn-group { display: flex; gap: 5px; margin-bottom: 15px; }
+        .mode-btn {
+            flex: 1; padding: 10px; border: 1px solid #555; background: none; color: var(--text-color); cursor: pointer; border-radius: 5px;
+        }
+        .mode-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .full-width { width: 100%; margin-top: 15px; }
+        select {
+            width: 100%; padding: 8px; border-radius: 5px; background: var(--cell-bg); color: var(--text-color); border: none; outline: none; margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Tic-Tac-Toe</h1>
+    </header>
+
+    <div class="container">
+        <div class="scoreboard">
+            <div class="player">
+                <span id="p1-name">Player 1 (X)</span>
+                <span id="score-p1" class="score">0</span>
+            </div>
+            <div class="rounds-info" id="rounds-section">
+                Round <span id="current-round">1</span> / <span id="total-rounds">5</span>
+            </div>
+            <div class="player">
+                <span id="p2-name">Computer (O)</span>
+                <span id="score-p2" class="score">0</span>
+            </div>
+        </div>
+
+        <div class="board" id="board">
+            <div class="cell" data-index="0"></div>
+            <div class="cell" data-index="1"></div>
+            <div class="cell" data-index="2"></div>
+            <div class="cell" data-index="3"></div>
+            <div class="cell" data-index="4"></div>
+            <div class="cell" data-index="5"></div>
+            <div class="cell" data-index="6"></div>
+            <div class="cell" data-index="7"></div>
+            <div class="cell" data-index="8"></div>
+        </div>
+
+        <p id="status-msg">X's Turn</p>
+        
+        <button id="play-again-btn" class="btn primary">🎮 Play Again</button>
+
+        <div class="controls" id="standard-controls">
+            <button id="restart-btn" class="btn primary">Restart Game</button>
+            <button id="settings-btn" class="btn secondary">Settings</button>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Game Setup</h2>
+            
+            <div class="section">
+                <h3>Mode</h3>
+                <div class="btn-group">
+                    <button class="mode-btn active" data-mode="pvc">vs Computer</button>
+                    <button class="mode-btn" data-mode="pvp">Local Friend</button>
+                </div>
+            </div>
+
+            <div class="section" id="rounds-select-container">
+                <h3>Rounds</h3>
+                <select id="round-select">
+                    <option value="3">Best of 3</option>
+                    <option value="5" selected>Best of 5</option>
+                    <option value="7">Best of 7</option>
+                </select>
+            </div>
+
+            <button id="save-settings" class="btn primary full-width">Save & Start</button>
+        </div>
+    </div>
+
+<script>
+// ==========================================
+// DOM ELEMENTS
+// ==========================================
+const board = document.getElementById('board');
+const cells = document.querySelectorAll('.cell');
+const statusMsg = document.getElementById('status-msg');
+const restartBtn = document.getElementById('restart-btn');
+const playAgainBtn = document.getElementById('play-again-btn');
+const standardControls = document.getElementById('standard-controls');
+
+// Modal & Settings
+const modal = document.getElementById('modal');
+const settingsBtn = document.getElementById('settings-btn');
+const closeBtn = document.querySelector('.close-btn');
+const saveSettingsBtn = document.getElementById('save-settings');
+const modeBtns = document.querySelectorAll('.mode-btn');
+const roundSelect = document.getElementById('round-select');
+
+// ==========================================
+// GAME VARIABLES & STATE
+// ==========================================
+let gameState = ["", "", "", "", "", "", "", "", ""];
+let gameActive = true;
+let currentPlayer = "X"; // "X" always makes the first move
+let gameMode = "pvc"; // 'pvc' (Computer) or 'pvp' (Friend)
+let maxRounds = 5;
+let currentRound = 1;
+
+// Scores and Symbols tracking
+let p1Symbol = "X";
+let p2Symbol = "O";
+let scores = { p1: 0, p2: 0 };
+
+// Winning Patterns
+const winningConditions = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+    [0, 4, 8], [2, 4, 6]             // Diagonals
+];
+
+// ==========================================
+// UI EVENT LISTENERS
+// ==========================================
+
+// Settings Modal
+settingsBtn.onclick = () => modal.style.display = "flex";
+closeBtn.onclick = () => modal.style.display = "none";
+
+// Mode Selection
+modeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        modeBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        gameMode = btn.dataset.mode;
+    });
+});
+
+// Save Settings Button
+saveSettingsBtn.addEventListener('click', () => {
+    maxRounds = parseInt(roundSelect.value);
+    document.getElementById('total-rounds').textContent = maxRounds;
+    resetFullGame();
+    modal.style.display = "none";
+});
+
+function updatePlayerNames() {
+    const p1Name = document.getElementById('p1-name');
+    const p2Name = document.getElementById('p2-name');
+    
+    p1Name.textContent = `Player 1 (${p1Symbol})`;
+    if (gameMode === 'pvc') {
+        p2Name.textContent = `Computer (${p2Symbol})`;
+    } else {
+        p2Name.textContent = `Player 2 (${p2Symbol})`;
+    }
+}
+
+// ==========================================
+// MAIN GAMEPLAY LOGIC
+// ==========================================
+
+function handleCellClick(e) {
+    const clickedCell = e.target;
+    const index = parseInt(clickedCell.getAttribute('data-index'));
+
+    if (gameState[index] !== "" || !gameActive) return;
+
+    if (gameMode === 'pvc' && currentPlayer === p2Symbol) return;
+
+    makeMove(clickedCell, index, currentPlayer);
+    
+    if (checkResult()) return;
+
+    if (gameMode === 'pvc' && currentPlayer === p2Symbol && gameActive) {
+        setTimeout(computerMove, 500);
+    }
+}
+
+function makeMove(cell, index, player) {
+    gameState[index] = player;
+    cell.textContent = player;
+    cell.classList.add(player.toLowerCase());
+}
+
+function checkResult() {
+    let roundWon = false;
+    for (let i = 0; i < winningConditions.length; i++) {
+        const [a, b, c] = winningConditions[i];
+        if (gameState[a] === "" || gameState[b] === "" || gameState[c] === "") continue;
+        if (gameState[a] === gameState[b] && gameState[b] === gameState[c]) {
+            roundWon = true;
+            break;
+        }
+    }
+
+    if (roundWon) {
+        endRound(currentPlayer);
+        return true;
+    }
+
+    if (!gameState.includes("")) {
+        statusMsg.textContent = `Round ${currentRound} is a Draw!`;
+        gameActive = false;
+        
+        if (!checkMatchEnd()) {
+            setTimeout(nextRound, 1500);
+        }
+        return true;
+    }
+
+    currentPlayer = currentPlayer === "X" ? "O" : "X";
+    
+    let turnName = currentPlayer === p1Symbol ? "Player 1" : (gameMode === 'pvc' ? "Computer" : "Player 2");
+    statusMsg.textContent = `${turnName}'s Turn (${currentPlayer})`;
+    
+    return false;
+}
+
+// ==========================================
+// COMPUTER AI
+// ==========================================
+function computerMove() {
+    if (!gameActive) return;
+
+    let moveIndex = findBestMove(p2Symbol); 
+    if (moveIndex === -1) moveIndex = findBestMove(p1Symbol); 
+    
+    if (moveIndex === -1) {
+        let available = gameState.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
+        if (available.length > 0) {
+            moveIndex = available[Math.floor(Math.random() * available.length)];
+        }
+    }
+
+    if (moveIndex !== -1) {
+        const cell = document.querySelector(`.cell[data-index='${moveIndex}']`);
+        makeMove(cell, moveIndex, p2Symbol);
+        checkResult();
+    }
+}
+
+function findBestMove(player) {
+    for (let i = 0; i < winningConditions.length; i++) {
+        const [a, b, c] = winningConditions[i];
+        let line = [gameState[a], gameState[b], gameState[c]];
+        let count = line.filter(val => val === player).length;
+        let empty = line.filter(val => val === "").length;
+
+        if (count === 2 && empty === 1) {
+            if (gameState[a] === "") return a;
+            if (gameState[b] === "") return b;
+            if (gameState[c] === "") return c;
+        }
+    }
+    return -1;
+}
+
+// ==========================================
+// ROUNDS SYSTEM & MATCH END LOGIC
+// ==========================================
+function endRound(winnerSymbol) {
+    let roundWinner = winnerSymbol === p1Symbol ? "Player 1" : (gameMode === 'pvc' ? "Computer" : "Player 2");
+    statusMsg.textContent = `🎉 ${roundWinner} wins Round ${currentRound}!`;
+    
+    if (winnerSymbol === p1Symbol) scores.p1++;
+    else scores.p2++;
+    
+    document.getElementById('score-p1').textContent = scores.p1;
+    document.getElementById('score-p2').textContent = scores.p2;
+    gameActive = false;
+
+    if (!checkMatchEnd()) {
+        setTimeout(nextRound, 1500);
+    }
+}
+
+function checkMatchEnd() {
+    let roundsNeededToWin = Math.ceil(maxRounds / 2);
+    let isMatchOver = false;
+    let finalMessage = "";
+
+    if (scores.p1 >= roundsNeededToWin) {
+        finalMessage = `🏆 Player 1 Wins the Match! 🏆`;
+        isMatchOver = true;
+    } else if (scores.p2 >= roundsNeededToWin) {
+        finalMessage = `🏆 ${gameMode === 'pvc' ? "Computer" : "Player 2"} Wins the Match! 🏆`;
+        isMatchOver = true;
+    } 
+    else if (currentRound >= maxRounds) {
+        isMatchOver = true;
+        if (scores.p1 > scores.p2) {
+            finalMessage = `🏆 Player 1 Wins the Match! 🏆`;
+        } else if (scores.p2 > scores.p1) {
+            finalMessage = `🏆 ${gameMode === 'pvc' ? "Computer" : "Player 2"} Wins the Match! 🏆`;
+        } else {
+            finalMessage = `🤝 Match Draw! Equal Points. 🤝`;
+        }
+    }
+
+    if (isMatchOver) {
+        setTimeout(() => {
+            statusMsg.innerHTML = finalMessage;
+            statusMsg.style.color = "var(--o-color)";
+            
+            // Show Play Again button, hide standard controls
+            playAgainBtn.style.display = "block";
+            standardControls.style.display = "none";
+        }, 1500);
+        return true; 
+    }
+
+    return false; 
+}
+
+function nextRound() {
+    currentRound++;
+    document.getElementById('current-round').textContent = currentRound;
+    
+    p1Symbol = p1Symbol === "X" ? "O" : "X";
+    p2Symbol = p2Symbol === "X" ? "O" : "X";
+    updatePlayerNames();
+    
+    resetBoardState();
+
+    if (gameMode === 'pvc' && p2Symbol === "X") {
+        setTimeout(computerMove, 500);
+    }
+}
+
+function resetBoardState() {
+    gameState = ["", "", "", "", "", "", "", "", ""];
+    gameActive = true;
+    currentPlayer = "X"; 
+    
+    let startingPlayerName = p1Symbol === "X" ? "Player 1" : (gameMode === 'pvc' ? "Computer" : "Player 2");
+    statusMsg.textContent = `${startingPlayerName}'s Turn (X)`;
+    statusMsg.style.color = "var(--text-color)"; 
+    
+    cells.forEach(cell => {
+        cell.textContent = "";
+        cell.className = 'cell'; 
+    });
+}
+
+function resetFullGame() {
+    scores = { p1: 0, p2: 0 };
+    currentRound = 1;
+    p1Symbol = "X"; 
+    p2Symbol = "O";
+    document.getElementById('score-p1').textContent = "0";
+    document.getElementById('score-p2').textContent = "0";
+    document.getElementById('current-round').textContent = "1";
+    
+    // Hide Play Again button, show standard controls
+    playAgainBtn.style.display = "none";
+    standardControls.style.display = "flex";
+    
+    updatePlayerNames();
+    resetBoardState();
+}
+
+// Initial Setup
+cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+restartBtn.addEventListener('click', resetFullGame);
+playAgainBtn.addEventListener('click', resetFullGame); // Play Again Button Event
+updatePlayerNames();
+resetBoardState();
+
+</script>
+</body>
+</html>

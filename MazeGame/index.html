@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Maze Pro: Full Screen</title>
+    <style>
+        :root {
+            --bg: #111827; --text: #f9fafb; --card: #1f2937;
+            --primary: #6366f1; --accent: #10b981; --wall: #4b5563;
+        }
+        body {
+            background-color: var(--bg); color: var(--text);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0; padding: 0;
+            height: 100vh; /* Full Height */
+            width: 100vw;  /* Full Width */
+            overflow: hidden; /* SCROLLING DISABLED */
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+            touch-action: none; /* Prevents screen from moving when swiping on mobile */
+        }
+
+        /* Compact Header Area */
+        .ui-container {
+            display: flex; flex-direction: column; align-items: center;
+            width: 100%; padding-top: 10px; flex-shrink: 0;
+        }
+
+        .header { display: flex; gap: 15px; align-items: center; margin-bottom: 5px; }
+        h1 { margin: 0; font-size: 1.2rem; color: var(--primary); }
+
+        .stats-bar {
+            display: flex; gap: 15px; background: var(--card); padding: 5px 15px;
+            border-radius: 50px; font-family: monospace; font-size: 1rem; margin-bottom: 5px;
+        }
+
+        .controls {
+            display: flex; gap: 8px; margin-bottom: 5px; flex-wrap: wrap; justify-content: center;
+        }
+        
+        select, button, label {
+            padding: 5px 10px; border-radius: 6px; border: none; font-size: 0.9rem; cursor: pointer;
+        }
+        button { background: var(--primary); color: white; }
+        button.solve { background: var(--accent); }
+        select { background: var(--card); color: white; border: 1px solid var(--wall); }
+
+        /* Canvas Container to fill remaining space */
+        .canvas-wrapper {
+            flex-grow: 1; display: flex; align-items: center; justify-content: center;
+            width: 100%; overflow: hidden; padding: 5px;
+        }
+        
+        canvas {
+            background: var(--card); border: 2px solid var(--wall);
+            border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* Popups */
+        #overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; display: flex; justify-content: center; align-items: center;
+            z-index: 10;
+        }
+        .win-msg {
+            background: rgba(16, 185, 129, 0.95); color: white; padding: 20px;
+            border-radius: 12px; font-size: 1.5rem; font-weight: bold;
+            display: none; text-align: center; pointer-events: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ui-container" id="uiArea">
+        <div class="header">
+            <h1>Maze Master 🏆</h1>
+            <div class="stats-bar">
+                <span style="color:#60a5fa">⏱️ <span id="time">00:00</span></span>
+                <span style="color:#fbbf24">👣 <span id="steps">0</span></span>
+            </div>
+        </div>
+
+        <div class="controls">
+            <select id="levelSelect" onchange="initGame(true)">
+                <option value="10">Easy</option>
+                <option value="20" selected>Medium</option>
+                <option value="30">Hard</option>
+            </select>
+            <button onclick="initGame(true)">Reset</button>
+            <button class="solve" onclick="solveMaze()">Solve</button>
+            <div style="display:inline-flex; align-items:center; background:var(--card); padding:5px; border-radius:5px;">
+                <input type="checkbox" id="fogToggle" onclick="draw()">
+                <label for="fogToggle" style="margin:0; padding-left:5px;">🔦 Fog</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="canvas-wrapper">
+        <canvas id="gameCanvas"></canvas>
+    </div>
+    
+    <div id="overlay">
+        <div id="winMessage" class="win-msg">
+            🎉 You Won! <br>
+            <button style="margin-top:10px; background:white; color:green;" onclick="initGame(true)">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const timeDisplay = document.getElementById('time');
+        const stepDisplay = document.getElementById('steps');
+        const winMsg = document.getElementById('winMessage');
+        const fogToggle = document.getElementById('fogToggle');
+
+        let cols, rows, w, size;
+        let grid = [], stack = [], solutionPath = [];
+        let player = { r: 0, c: 0 };
+        let isGameOver = false, timerInterval, startTime, stepCount = 0;
+
+        // --- SOUND SYSTEM ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            if (type === 'step') {
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+            } else if (type === 'bump') {
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(100, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+            }
+        }
+
+        // --- Auto Resize Logic ---
+        function resizeCanvas() {
+            const uiHeight = document.getElementById('uiArea').offsetHeight;
+            const availableHeight = window.innerHeight - uiHeight - 20; 
+            const availableWidth = window.innerWidth - 20;
+            
+            size = Math.floor(Math.min(availableHeight, availableWidth));
+            canvas.width = size;
+            canvas.height = size;
+            
+            if(cols) {
+                w = size / cols;
+                draw();
+            }
+        }
+        
+        window.addEventListener('resize', resizeCanvas);
+
+        class Cell {
+            constructor(r, c) {
+                this.r = r; this.c = c;
+                this.walls = [true, true, true, true]; 
+                this.visited = false;
+            }
+            show() {
+                let x = this.c * w, y = this.r * w;
+                ctx.strokeStyle = "#4b5563"; ctx.lineWidth = 2;
+                if (this.walls[0]) line(x, y, x + w, y);
+                if (this.walls[1]) line(x + w, y, x + w, y + w);
+                if (this.walls[2]) line(x + w, y + w, x, y + w);
+                if (this.walls[3]) line(x, y + w, x, y);
+            }
+        }
+
+        function line(x1, y1, x2, y2) { ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); }
+        function index(r, c) { if (r < 0 || c < 0 || r > rows - 1 || c > cols - 1) return -1; return c + r * cols; }
+
+        function initGame(playSnd = false) {
+            if (playSnd) playSound('step');
+            let val = parseInt(document.getElementById('levelSelect').value);
+            cols = rows = val;
+            resizeCanvas(); 
+            
+            grid = []; stack = []; solutionPath = [];
+            player = { r: 0, c: 0 };
+            isGameOver = false; stepCount = 0;
+            stepDisplay.innerText = "0"; winMsg.style.display = "none";
+            clearInterval(timerInterval); startTime = Date.now();
+            timerInterval = setInterval(() => {
+                let delta = Math.floor((Date.now() - startTime) / 1000);
+                timeDisplay.innerText = new Date(delta * 1000).toISOString().substr(14, 5);
+            }, 1000);
+
+            for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) grid.push(new Cell(r, c));
+            let start = grid[0];
+            generateMaze(start);
+            draw();
+        }
+
+        function generateMaze(current) {
+            current.visited = true;
+            let next = checkNeighbors(current);
+            if (next) {
+                next.visited = true; stack.push(current);
+                removeWalls(current, next);
+                generateMaze(next);
+            } else if (stack.length > 0) {
+                generateMaze(stack.pop());
+            }
+        }
+
+        function checkNeighbors(cell) {
+            let neighbors = [];
+            let top = grid[index(cell.r - 1, cell.c)], right = grid[index(cell.r, cell.c + 1)],
+                bottom = grid[index(cell.r + 1, cell.c)], left = grid[index(cell.r, cell.c - 1)];
+            if (top && !top.visited) neighbors.push(top);
+            if (right && !right.visited) neighbors.push(right);
+            if (bottom && !bottom.visited) neighbors.push(bottom);
+            if (left && !left.visited) neighbors.push(left);
+            return neighbors.length > 0 ? neighbors[Math.floor(Math.random() * neighbors.length)] : undefined;
+        }
+
+        function removeWalls(a, b) {
+            let x = a.c - b.c;
+            if (x === -1) { a.walls[1] = false; b.walls[3] = false; } else if (x === 1) { a.walls[3] = false; b.walls[1] = false; }
+            let y = a.r - b.r;
+            if (y === -1) { a.walls[2] = false; b.walls[0] = false; } else if (y === 1) { a.walls[0] = false; b.walls[2] = false; }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, size, size);
+            grid.forEach(cell => cell.show());
+
+            if (solutionPath.length > 0) {
+                ctx.beginPath(); ctx.strokeStyle = "rgba(16, 185, 129, 0.6)"; ctx.lineWidth = w/2;
+                ctx.moveTo(w/2, w/2);
+                solutionPath.forEach(p => ctx.lineTo(p.c*w + w/2, p.r*w + w/2));
+                ctx.stroke();
+            }
+
+            ctx.fillStyle = "#ef4444"; ctx.beginPath();
+            ctx.roundRect((cols-1)*w+2, (rows-1)*w+2, w-4, w-4, 4); ctx.fill();
+
+            ctx.fillStyle = "#3b82f6"; ctx.beginPath();
+            ctx.arc(player.c*w + w/2, player.r*w + w/2, w/3, 0, Math.PI*2); ctx.fill();
+
+            if (fogToggle.checked && !isGameOver) {
+                ctx.globalCompositeOperation = 'destination-in';
+                let grad = ctx.createRadialGradient(player.c*w + w/2, player.r*w + w/2, w/2, player.c*w + w/2, player.r*w + w/2, w * 5);
+                grad.addColorStop(0, 'rgba(0,0,0,1)'); grad.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = grad; ctx.fillRect(0,0,size,size);
+                ctx.globalCompositeOperation = 'source-over';
+            }
+        }
+
+        // --- Common Movement Logic ---
+        function movePlayer(direction) {
+            if (isGameOver) return;
+            let current = grid[index(player.r, player.c)];
+            let moved = false;
+            
+            if (direction === 'Up' && !current.walls[0]) { player.r--; moved = true; }
+            else if (direction === 'Right' && !current.walls[1]) { player.c++; moved = true; }
+            else if (direction === 'Down' && !current.walls[2]) { player.r++; moved = true; }
+            else if (direction === 'Left' && !current.walls[3]) { player.c--; moved = true; }
+
+            if (moved) {
+                playSound('step');
+                stepCount++; stepDisplay.innerText = stepCount;
+                if (player.r === rows - 1 && player.c === cols - 1) {
+                    isGameOver = true; clearInterval(timerInterval);
+                    winMsg.style.display = "block"; fogToggle.checked = false;
+                }
+                draw();
+            } else {
+                playSound('bump');
+                if (navigator.vibrate) navigator.vibrate(50);
+            }
+        }
+
+        // --- Keyboard Controls ---
+        window.addEventListener('keydown', (e) => {
+            if (e.key.startsWith('Arrow')) {
+                e.preventDefault();
+                movePlayer(e.key.replace('Arrow', ''));
+            }
+        });
+
+        // --- Mobile Swipe Controls ---
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        window.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, {passive: false});
+
+        window.addEventListener('touchend', (e) => {
+            let touchEndX = e.changedTouches[0].screenX;
+            let touchEndY = e.changedTouches[0].screenY;
+            
+            let dx = touchEndX - touchStartX;
+            let dy = touchEndY - touchStartY;
+            
+            if (Math.abs(dx) > 30 || Math.abs(dy) > 30) {
+                if (Math.abs(dx) > Math.abs(dy)) {
+                    if (dx > 0) movePlayer('Right');
+                    else movePlayer('Left');
+                } else {
+                    if (dy > 0) movePlayer('Down');
+                    else movePlayer('Up');
+                }
+            }
+        }, {passive: false});
+
+        window.onload = () => initGame(false);
+    </script>
+</body>
+</html>

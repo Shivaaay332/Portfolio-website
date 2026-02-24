@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hangman Pro: Panic Mode & Dictionary</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            /* Permanent Dark Mode Variables */
+            --bg-color: #1a1a2e;
+            --text-color: #ecf0f1;
+            --card-bg: #16213e;
+            --primary: #0f3460;
+            --danger: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --word-color: #ffd700;
+        }
+
+        /* 💓 PANIC MODE ANIMATION (Jab 1 life bachegi) */
+        @keyframes panicPulse {
+            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(231, 76, 60, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+        
+        .panic-mode {
+            border: 2px solid var(--danger) !important;
+            animation: panicPulse 1s infinite;
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent; /* Mobile touch highlight disable */
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh; /* Fixed height to avoid scroll */
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrolling */
+            touch-action: manipulation;
+            user-select: none; /* Prevent accidental text selection */
+        }
+
+        .timer-container { width: 100%; height: 5px; background: #ddd; position: fixed; top: 0; left: 0; z-index: 100; }
+        .timer-bar { height: 100%; background: var(--danger); width: 100%; transition: width 1s linear; }
+
+        .header { width: 90%; max-width: 600px; display: flex; justify-content: center; padding: 15px 0 15px 0; align-items: center; flex-shrink: 0; }
+        .stats { font-weight: bold; font-size: 1rem; display: flex; gap: 10px; }
+        .stat-box { background: rgba(0,0,0,0.2); padding: 5px 10px; border-radius: 10px; font-size: 0.9rem; }
+
+        .game-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            width: 95%;
+            max-width: 650px;
+            flex: 1; /* ✅ Ye card ko bachi hui saari jagah lene dega */
+            margin-bottom: 12px; /* ✅ Niche thodi si "malum be malum" jagah */
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly; /* ✅ Elements ke beech me barabar space baant dega */
+            transition: 0.3s;
+        }
+
+        .category-badge {
+            background: var(--warning); color: #fff; padding: 4px 15px; border-radius: 15px;
+            font-size: 0.85rem; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-weight: bold;
+        }
+
+        /* ✅ SVG ko thoda bada aur flexible banaya hai taaki empty space fill ho */
+        .hangman-svg { flex: 1; max-height: 22vh; min-height: 120px; width: 100%; stroke: var(--text-color); stroke-width: 4; fill: none; stroke-linecap: round; }
+        .part { opacity: 0; stroke-dasharray: 100; stroke-dashoffset: 100; transition: opacity 0.1s; }
+        .part.show { opacity: 1; animation: draw 1s forwards; }
+        @keyframes draw { to { stroke-dashoffset: 0; } }
+
+        .word-display {
+            font-size: 1.8rem; letter-spacing: 5px; margin: 10px 0 5px 0;
+            font-weight: 800; color: var(--word-color); min-height: 40px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2); word-wrap: break-word;
+        }
+        
+        #wordDefinition { font-style: italic; color: var(--text-color); opacity: 0.8; font-size: 0.85rem; min-height: 20px; margin-bottom: 5px; padding: 0 5px; }
+
+        /* HINT BUTTONS (POWERUPS) */
+        .powerups { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+        .btn-power {
+            background: var(--bg-color); border: 1px solid rgba(255,255,255,0.2); color: var(--text-color);
+            padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: bold;
+        }
+        .btn-power:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        /* KEYBOARD */
+        .keyboard-container { display: flex; flex-direction: column; gap: 8px; align-items: center; width: 100%; }
+        .keyboard-row { display: flex; justify-content: center; gap: 5px; width: 100%; }
+        .key {
+            padding: 12px 0; border: none; border-radius: 6px; background: rgba(255,255,255,0.1);
+            font-weight: bold; cursor: pointer; color: var(--text-color); transition: 0.1s;
+            font-size: 1.1rem; flex: 1; max-width: 45px; min-width: 30px;
+        }
+        .key:active { transform: scale(0.9); }
+        .key.correct { background: var(--success); color: white; }
+        .key.wrong { background: var(--danger); color: white; }
+        .key:disabled { opacity: 0.5; cursor: default; }
+
+        .controls-container { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .btn-main {
+            background: var(--primary); color: white; border: none; padding: 12px 18px;
+            border-radius: 8px; cursor: pointer; font-size: 0.95rem; font-weight: bold;
+            transition: transform 0.2s; flex: 1; max-width: 200px;
+        }
+        .btn-main:active { transform: scale(0.95); }
+        .btn-challenge { background: #9b59b6; }
+    </style>
+</head>
+<body>
+
+    <div class="timer-container"><div class="timer-bar" id="timerBar"></div></div>
+
+    <div class="header">
+        <div class="stats">
+            <div class="stat-box">🔥 Streak: <span id="streak">0</span></div>
+            <div class="stat-box">🏆 Best: <span id="bestStreak">0</span></div>
+        </div>
+    </div>
+
+    <div class="game-card" id="gameCard">
+        <div class="category-badge" id="categoryName">Loading...</div>
+
+        <svg class="hangman-svg" viewBox="0 0 100 100">
+            <path d="M20 90 L80 90 M30 90 L30 10 L60 10 L60 20" />
+            <circle cx="60" cy="28" r="8" class="part" id="part-0" />
+            <line x1="60" y1="36" x2="60" y2="60" class="part" id="part-1" />
+            <line x1="60" y1="45" x2="45" y2="55" class="part" id="part-2" />
+            <line x1="60" y1="45" x2="75" y2="55" class="part" id="part-3" />
+            <line x1="60" y1="60" x2="45" y2="75" class="part" id="part-4" />
+            <line x1="60" y1="60" x2="75" y2="75" class="part" id="part-5" />
+        </svg>
+
+        <div>
+            <div class="word-display" id="wordDisplay">_ _ _ _</div>
+            <p id="wordDefinition"></p>
+        </div>
+
+        <div class="powerups">
+            <button class="btn-power" id="btn-reveal" onclick="powerReveal()">👁️ Reveal</button>
+            <button class="btn-power" id="btn-life" onclick="powerLife()">❤️ Life</button>
+            <button class="btn-power" id="btn-vowel" onclick="powerVowels()">🅰️ Vowels</button>
+        </div>
+
+        <div class="keyboard-container" id="keyboard"></div>
+        
+        <div class="controls-container">
+            <button class="btn-main" onclick="initGame()">🔄 New Game</button>
+            <button class="btn-main btn-challenge" onclick="challengeFriend()">⚔️ Challenge</button>
+        </div>
+    </div>
+
+    <script>
+        // --- 🔊 SOUND SYSTEM ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            if (type === 'correct') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(50, audioCtx.currentTime + 0.3);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+            } else if (type === 'click') {
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+            }
+        }
+
+        // --- GAME DATA ---
+        const wordData = {
+            "FRUITS": ["APPLE", "BANANA", "MANGO", "ORANGE", "GRAPES", "KIWI", "PAPAYA"],
+            "ANIMALS": ["TIGER", "LION", "ELEPHANT", "ZEBRA", "MONKEY", "RABBIT", "PANDA"],
+            "TECH": ["LAPTOP", "MOUSE", "KEYBOARD", "SCREEN", "WIFI", "PHONE", "CODE"],
+            "COUNTRIES": ["INDIA", "CHINA", "USA", "JAPAN", "CANADA", "BRAZIL", "FRANCE"]
+        };
+
+        let currentWord = "";
+        let displayArr = [];
+        let mistakes = 0;
+        let streak = parseInt(localStorage.getItem('streak')) || 0;
+        let bestStreak = parseInt(localStorage.getItem('bestStreak')) || 0;
+        let timeLeft = 60;
+        let timerInterval;
+        let gameActive = false;
+
+        document.getElementById("streak").innerText = streak;
+        document.getElementById("bestStreak").innerText = bestStreak;
+
+        let usedReveal = false; let usedLife = false; let usedVowel = false;
+
+        // --- KEYBOARD LISTENER ---
+        document.addEventListener("keydown", (e) => {
+            if (!gameActive) return;
+            const char = e.key.toUpperCase();
+            if (/^[A-Z]$/.test(char)) handleGuess(char);
+        });
+
+        // --- DICTIONARY ---
+        async function fetchDefinition(word) {
+            const defBox = document.getElementById("wordDefinition");
+            defBox.innerText = "Finding meaning...";
+            try {
+                const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+                const data = await res.json();
+                if (data[0] && data[0].meanings[0].definitions[0]) {
+                    defBox.innerText = "💡 " + data[0].meanings[0].definitions[0].definition;
+                } else {
+                    defBox.innerText = "💡 (Definition not found)";
+                }
+            } catch (err) { defBox.innerText = ""; }
+        }
+
+        function initGame() {
+            playSound('click');
+            clearInterval(timerInterval);
+            mistakes = 0; timeLeft = 60; gameActive = true;
+            usedReveal = false; usedLife = false; usedVowel = false;
+
+            // Reset UI
+            document.getElementById("gameCard").classList.remove("panic-mode"); // Panic off
+            document.getElementById("btn-reveal").disabled = false;
+            document.getElementById("btn-life").disabled = false;
+            document.getElementById("btn-vowel").disabled = false;
+            document.getElementById("wordDefinition").innerText = "";
+            document.querySelectorAll(".part").forEach(p => p.classList.remove("show"));
+
+            const categories = Object.keys(wordData);
+            const randomCat = categories[Math.floor(Math.random() * categories.length)];
+            const words = wordData[randomCat];
+            currentWord = words[Math.floor(Math.random() * words.length)];
+
+            document.getElementById("categoryName").innerText = "Topic: " + randomCat;
+            displayArr = Array(currentWord.length).fill("_");
+            
+            renderDisplay();
+            renderQWERTY();
+            startTimer();
+        }
+
+        function challengeFriend() {
+            let customWord = prompt("Enter a secret word for your friend:");
+            if (customWord) {
+                customWord = customWord.toUpperCase().trim();
+                if (!/^[A-Z]+$/.test(customWord)) {
+                    alert("Please use letters (A-Z) only!");
+                    return;
+                }
+                playSound('click'); clearInterval(timerInterval);
+                mistakes = 0; timeLeft = 60; gameActive = true;
+                usedReveal = false; usedLife = false; usedVowel = false;
+                
+                document.getElementById("gameCard").classList.remove("panic-mode");
+                document.getElementById("btn-reveal").disabled = false;
+                document.getElementById("btn-life").disabled = false;
+                document.getElementById("btn-vowel").disabled = false;
+                document.getElementById("wordDefinition").innerText = "";
+                document.querySelectorAll(".part").forEach(p => p.classList.remove("show"));
+                
+                currentWord = customWord;
+                document.getElementById("categoryName").innerText = "Topic: CHALLENGE MODE ⚔️";
+                displayArr = Array(currentWord.length).fill("_");
+                renderDisplay(); renderQWERTY(); startTimer();
+                alert("Game Ready! Friend ko phone do.");
+            }
+        }
+
+        function renderDisplay() { document.getElementById("wordDisplay").innerText = displayArr.join(" "); }
+
+        function renderQWERTY() {
+            const kbContainer = document.getElementById("keyboard");
+            kbContainer.innerHTML = "";
+            ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"].forEach(rowString => {
+                const rowDiv = document.createElement("div");
+                rowDiv.className = "keyboard-row";
+                rowString.split("").forEach(char => {
+                    const btn = document.createElement("button");
+                    btn.innerText = char;
+                    btn.id = "key-" + char;
+                    btn.className = "key";
+                    btn.onclick = () => handleGuess(char);
+                    rowDiv.appendChild(btn);
+                });
+                kbContainer.appendChild(rowDiv);
+            });
+        }
+
+        function handleGuess(char) {
+            if (!gameActive) return;
+            const btn = document.getElementById("key-" + char);
+            if (btn && btn.disabled) return;
+            if (btn) btn.disabled = true;
+
+            if (currentWord.includes(char)) {
+                playSound('correct');
+                if(btn) btn.classList.add("correct");
+                currentWord.split("").forEach((letter, i) => { if (letter === char) displayArr[i] = char; });
+                renderDisplay(); checkWin();
+            } else {
+                playSound('wrong');
+                if(btn) btn.classList.add("wrong");
+                addMistake();
+            }
+        }
+
+        function addMistake() {
+            if (mistakes < 6) {
+                const part = document.getElementById(`part-${mistakes}`);
+                if(part) part.classList.add("show");
+                mistakes++;
+                
+                // 💓 PANIC MODE CHECK (Last Life)
+                if (mistakes === 5) {
+                    document.getElementById("gameCard").classList.add("panic-mode");
+                }
+            }
+            if (mistakes === 6) {
+                gameActive = false; clearInterval(timerInterval);
+                document.getElementById("gameCard").classList.remove("panic-mode");
+                fetchDefinition(currentWord);
+                streak = 0; localStorage.setItem('streak', 0);
+                document.getElementById("streak").innerText = 0;
+                setTimeout(() => alert("💀 Game Over! Word: " + currentWord), 500);
+            }
+        }
+
+        function startTimer() {
+            const bar = document.getElementById("timerBar");
+            bar.style.width = "100%";
+            timerInterval = setInterval(() => {
+                if(!gameActive) return;
+                timeLeft--;
+                bar.style.width = (timeLeft / 60) * 100 + "%";
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    gameActive = false;
+                    fetchDefinition(currentWord);
+                    streak = 0; localStorage.setItem('streak', 0);
+                    document.getElementById("streak").innerText = 0;
+                    alert("⏰ Time Up! Word: " + currentWord);
+                }
+            }, 1000);
+        }
+
+        function powerReveal() {
+            if (!gameActive || usedReveal) return; playSound('click');
+            let hiddenIndexes = [];
+            displayArr.forEach((char, index) => { if (char === "_") hiddenIndexes.push(index); });
+            if (hiddenIndexes.length > 0) {
+                handleGuess(currentWord[hiddenIndexes[Math.floor(Math.random() * hiddenIndexes.length)]]);
+                usedReveal = true; document.getElementById("btn-reveal").disabled = true;
+            }
+        }
+
+        function powerLife() {
+            if (!gameActive || usedLife || mistakes === 0) return; playSound('click');
+            mistakes--;
+            document.getElementById(`part-${mistakes}`).classList.remove("show");
+            document.getElementById("gameCard").classList.remove("panic-mode"); // Panic hatado
+            usedLife = true; document.getElementById("btn-life").disabled = true;
+        }
+
+        function powerVowels() {
+            if (!gameActive || usedVowel) return; playSound('click');
+            ['A', 'E', 'I', 'O', 'U'].forEach(v => { if (currentWord.includes(v)) handleGuess(v); });
+            usedVowel = true; document.getElementById("btn-vowel").disabled = true;
+        }
+
+        function checkWin() {
+            if (!displayArr.includes("_")) {
+                gameActive = false; clearInterval(timerInterval);
+                document.getElementById("gameCard").classList.remove("panic-mode");
+                fetchDefinition(currentWord);
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                streak++; 
+                if (streak > bestStreak) { bestStreak = streak; localStorage.setItem('bestStreak', bestStreak); document.getElementById("bestStreak").innerText = bestStreak; }
+                localStorage.setItem('streak', streak); document.getElementById("streak").innerText = streak;
+                setTimeout(() => { if(confirm("🎉 WON! Play Next?")) initGame(); }, 1000);
+            }
+        }
+
+        initGame();
+    </script>
+</body>
+</html>

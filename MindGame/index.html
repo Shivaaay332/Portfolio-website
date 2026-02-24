@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Master Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c3e50">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>Memory Master 🧠</h1>
+        
+        <div class="controls-section">
+            <div class="difficulty-btns">
+                <button onclick="startGame('easy')" class="btn-level">Easy</button>
+                <button onclick="startGame('medium')" class="btn-level active">Medium</button>
+                <button onclick="startGame('hard')" class="btn-level">Hard</button>
+            </div>
+            
+            <label class="mode-switch">
+                <input type="checkbox" id="timeAttackMode"> 💣 Time Attack
+            </label>
+        </div>
+
+        <div class="powerups-container">
+            <button id="btn-peek" onclick="usePowerUp('peek')" class="btn-pwr">👁️ Peek (1)</button>
+            <button id="btn-freeze" onclick="usePowerUp('freeze')" class="btn-pwr">❄️ Freeze (1)</button>
+        </div>
+
+        <div class="score-board">
+            <div class="stat">Moves: <b id="moves">0</b></div>
+            <div class="stat">Time: <b id="time">0s</b></div>
+            <div class="stat">Lives: <b id="lives">10</b> ❤️</div>
+            <div class="stat">Best: <b id="best-time">-</b></div>
+        </div>
+        
+        <div class="memory-game" id="game-board"></div>
+
+        <button class="restart-btn" onclick="startGame(currentLevel)">Restart Game</button>
+    </div>
+
+    <audio id="flipSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
+    <audio id="matchSound" src="https://assets.mixkit.co/active_storage/sfx/2020/2020-preview.mp3"></audio>
+    <audio id="winSound" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
+
+    <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>

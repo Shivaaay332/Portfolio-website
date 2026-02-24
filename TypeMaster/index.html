@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeMaster Pro | Minimal Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f0f2f5; --sidebar-bg: #ffffff; --card: #ffffff;
+            --text-main: #2d3436; --text-sub: #636e72; --accent: #00838f;
+            --main-btn: #00838f; --error: #d63031; --correct: #00b894;
+        }
+
+        [data-theme="dark"] {
+            --bg: #18191a; --sidebar-bg: #242526; --card: #242526;
+            --text-main: #e4e6eb; --text-sub: #b0b3b8; --accent: #00acc1;
+            --main-btn: #00acc1;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; transition: 0.3s; }
+        body { background: var(--bg); color: var(--text-main); display: flex; min-height: 100vh; overflow: hidden; }
+
+        .sidebar {
+            width: 260px; background: var(--sidebar-bg); border-right: 1px solid rgba(0,0,0,0.1);
+            display: flex; flex-direction: column; padding: 30px 20px; z-index: 100;
+        }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--accent); margin-bottom: 40px; text-align: center; }
+        .nav-item { 
+            padding: 12px 15px; border-radius: 10px; cursor: pointer; color: var(--text-sub); 
+            margin-bottom: 5px; font-weight: 500; display: flex; align-items: center; gap: 10px;
+        }
+        .nav-item:hover, .nav-item.active { background: rgba(0,131,143,0.1); color: var(--accent); }
+        .sidebar-footer { margin-top: auto; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 20px; }
+        
+        .toggle-container { display: flex; align-items: center; justify-content: space-between; font-size: 0.9rem; }
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--accent); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        .main-content { flex: 1; display: flex; justify-content: center; align-items: center; position: relative; }
+        .page { display: none; width: 100%; max-width: 900px; animation: fadeIn 0.4s ease; flex-direction: column; align-items: center; }
+        .active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .hero-card { 
+            background: var(--card); padding: 50px; border-radius: 25px; text-align: center; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05); width: 100%; max-width: 700px;
+        }
+        .hero-title { font-size: 2.2rem; font-weight: 700; margin-bottom: 10px; }
+        .selection-box { background: var(--bg); padding: 25px; border-radius: 15px; margin-top: 30px; display: flex; flex-direction: column; gap: 15px; }
+        select { 
+            width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; 
+            background: var(--sidebar-bg); color: var(--text-main); font-size: 1rem; outline: none;
+        }
+        .start-btn { 
+            background: var(--main-btn); color: white; border: none; padding: 16px 40px; 
+            border-radius: 30px; font-weight: 700; cursor: pointer; font-size: 1.1rem; margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,131,143,0.3);
+        }
+
+        .test-box { width: 100%; }
+        .test-stats { display: flex; justify-content: space-around; background: var(--card); padding: 20px; border-radius: 15px; margin-bottom: 20px; font-weight: 600; }
+        #textDisplay { 
+            font-family: 'Roboto Mono', monospace; font-size: 1.4rem; line-height: 1.8; 
+            background: var(--card); padding: 30px; border-radius: 20px; min-height: 250px; text-align: left;
+            overflow-y: auto; max-height: 400px;
+        }
+        .char { color: var(--text-sub); border-left: 2px solid transparent; }
+        .char.correct { color: var(--correct); }
+        .char.incorrect { color: var(--error); background: rgba(214, 48, 49, 0.1); }
+        .char.current { border-left-color: var(--accent); animation: blink 1s infinite; }
+        #hiddenInput { position: absolute; opacity: 0; pointer-events: none; }
+
+        .keyboard { display: flex; flex-direction: column; gap: 8px; margin-top: 30px; align-items: center; }
+        .kb-row { display: flex; gap: 6px; }
+        .key { 
+            width: 42px; height: 42px; background: var(--card); border: 1px solid rgba(0,0,0,0.1); 
+            border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem;
+        }
+        .key.active { background: var(--accent); color: white; transform: translateY(2px); }
+
+        .result-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; width: 100%; margin-top: 30px; }
+        .res-box { background: var(--card); padding: 25px; border-radius: 15px; text-align: center; }
+        .res-box h2 { color: var(--accent); font-size: 2.5rem; }
+
+        @keyframes blink { 50% { border-left-color: transparent; } }
+    </style>
+</head>
+<body data-theme="light">
+
+    <div class="sidebar">
+        <div class="logo">TYPEMASTER</div>
+        <div class="nav-item active" onclick="location.reload()">Typing Test</div>
+        <div class="sidebar-footer">
+            <div class="nav-item" id="loginLabel" style="color:var(--accent)">👤 Welcome</div>
+            <div class="toggle-container" style="padding: 12px 15px;">
+                <span>Dark Mode</span>
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div id="frontPage" class="page active">
+            <div class="hero-card">
+                <div class="hero-title">Check your typing skills</div>
+                <div class="selection-box">
+                    <select id="timeSelect">
+                        <option value="60">1 Minute Test</option>
+                        <option value="120">2 Minute Test</option>
+                        <option value="300">5 Minute Test</option>
+                    </select>
+                    <select id="diffSelect">
+                        <option value="easy">Easy (Long Story)</option>
+                        <option value="medium">Medium (Professional)</option>
+                        <option value="hard">Hard (Code & Logic)</option>
+                    </select>
+                </div>
+                <button class="start-btn" onclick="startTest()">START TEST</button>
+            </div>
+        </div>
+
+        <div id="testPage" class="page">
+            <div class="test-box">
+                <div class="test-stats">
+                    <span>Time: <span id="timer" style="color:var(--accent)">0:00</span></span>
+                    <span>WPM: <span id="liveWpm" style="color:var(--accent)">0</span></span>
+                    <span>Accuracy: <span id="liveAcc" style="color:var(--accent)">100%</span></span>
+                </div>
+                <div id="textDisplay" onclick="focusInput()"></div>
+                <input type="text" id="hiddenInput" autocomplete="off">
+                <div class="keyboard" id="keyboard"></div>
+            </div>
+        </div>
+
+        <div id="resultPage" class="page">
+            <div class="hero-card">
+                <h2>Test Results</h2>
+                <div class="result-grid">
+                    <div class="res-box"><p>WPM</p><h2 id="fWpm">0</h2></div>
+                    <div class="res-box"><p>Accuracy</p><h2 id="fAcc">0%</h2></div>
+                    <div class="res-box"><p>Mistakes</p><h2 id="fMistakes">0</h2></div>
+                </div>
+                <button class="start-btn" onclick="location.reload()">TRY AGAIN</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const texts = {
+            easy: [
+                "The quick brown fox jumps over the lazy dog in a beautiful garden filled with blooming flowers. This simple sentence contains every letter of the alphabet and is often used to test typewriters and computer keyboards. Typing consistently is the best way to improve your muscle memory and speed over time. Remember that accuracy is more important than raw speed because fixing mistakes takes much longer than typing correctly the first time. Keep your back straight, your feet flat on the floor, and your fingers resting lightly on the home row keys. This posture will help you type for longer periods without getting tired or causing strain to your wrists.",
+                "Imagine a peaceful mountain range where the air is crisp and the sky is a deep shade of blue. Walking through the forest, you can hear the sound of dry leaves crunching under your feet and the distant chirping of birds high up in the trees. Nature has a wonderful way of calming the mind and refreshing the spirit after a long week of work. Many people find that spending time outdoors helps them focus better and stay creative. Whether it is a short walk in the local park or a long hike in the wilderness, the benefits of being in nature are truly endless for both physical and mental health."
+            ],
+            medium: [
+                "Professional communication requires a balance of clarity, conciseness, and courtesy. When writing emails or reports, it is essential to consider your audience and the message you want to convey. Using simple language and avoiding unnecessary jargon can make your writing much more accessible and effective. Furthermore, proofreading your work for grammatical errors and typos shows attention to detail and a high level of professionalism. In today's digital age, the ability to type quickly and accurately is a valuable asset in almost every career path. Constant practice will eventually lead to mastery of this essential modern skill.",
+                "Technology has transformed the way we live and work in ways we could never have imagined just a few decades ago. From the rise of the internet to the development of artificial intelligence, innovation continues to push the boundaries of what is possible. While these advancements bring many benefits, they also present new challenges that we must navigate carefully. Data privacy, cybersecurity, and the digital divide are just a few of the critical issues that society faces today. As we move forward, it is important to ensure that technology serves to empower everyone and contributes to a more equitable and sustainable future for all."
+            ],
+            hard: [
+                "class TypeMaster { constructor(user) { this.user = user; this.speed = 0; } calculateWPM(chars, time) { const words = chars / 5; return Math.round(words / (time / 60)); } async startTest() { try { const data = await fetch('/api/text'); this.text = await data.json(); this.render(); } catch (err) { console.error('Error:', err); } } } const app = new TypeMaster('Pro'); app.startTest().then(() => { window.addEventListener('keypress', (e) => app.handleInput(e)); });",
+                "import React, { useState, useEffect } from 'react'; function TypingHook() { const [val, setVal] = useState(''); useEffect(() => { const timer = setInterval(() => { console.log('Tick'); }, 1000); return () => clearInterval(timer); }, []); const handleChange = (e) => { const input = e.target.value; if (input.length > 100) { throw new Error('Input too long'); } setVal(input); }; return <input value={val} onChange={handleChange} placeholder='Type here...' />; }"
+            ]
+        };
+
+        let maxTime, timeLeft, timerInterval, isTyping = false;
+        let charIndex = 0, mistakes = 0, totalTyped = 0;
+        let lastParaIndex = -1;
+
+        function toggleTheme() {
+            const isDark = document.getElementById('themeToggle').checked;
+            document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        }
+
+        const kbRows = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
+        const kb = document.getElementById('keyboard');
+        kbRows.forEach(row => {
+            const div = document.createElement('div');
+            div.className = 'kb-row';
+            row.split('').forEach(k => div.innerHTML += `<div class="key" id="key-${k}">${k.toUpperCase()}</div>`);
+            kb.appendChild(div);
+        });
+
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function startTest() {
+            maxTime = parseInt(document.getElementById('timeSelect').value);
+            timeLeft = maxTime;
+            charIndex = 0; mistakes = 0; totalTyped = 0; isTyping = false; lastParaIndex = -1;
+            document.getElementById('timer').innerText = formatTime(timeLeft);
+            showPage('testPage');
+            loadText();
+            setTimeout(focusInput, 100);
+        }
+
+        function loadText() {
+            const diff = document.getElementById('diffSelect').value;
+            const display = document.getElementById('textDisplay');
+            const options = texts[diff];
+            let randomIndex;
+            do { randomIndex = Math.floor(Math.random() * options.length); } while (randomIndex === lastParaIndex);
+            lastParaIndex = randomIndex;
+            display.innerHTML = "";
+            options[randomIndex].split("").forEach(c => display.innerHTML += `<span class="char">${c}</span>`);
+            charIndex = 0;
+            display.querySelectorAll('.char')[0].classList.add('current');
+            display.scrollTop = 0;
+        }
+
+        function focusInput() { document.getElementById('hiddenInput').focus(); }
+
+        document.getElementById('hiddenInput').addEventListener('input', (e) => {
+            if(!isTyping) { startTimer(); isTyping = true; }
+            const chars = document.querySelectorAll('.char');
+            let typed = e.target.value.split("")[charIndex];
+
+            document.querySelectorAll('.key').forEach(k => k.classList.remove('active'));
+            if(typed) {
+                const kEl = document.getElementById(`key-${typed.toLowerCase()}`);
+                if(kEl) kEl.classList.add('active');
+            }
+
+            if (typed == null) {
+                if (charIndex > 0) {
+                    charIndex--;
+                    if (chars[charIndex].classList.contains('incorrect')) mistakes--;
+                    chars[charIndex].classList.remove('correct', 'incorrect');
+                }
+            } else {
+                if (chars[charIndex].innerText === typed) chars[charIndex].classList.add('correct');
+                else { mistakes++; chars[charIndex].classList.add('incorrect'); }
+                charIndex++; totalTyped++;
+            }
+
+            if(charIndex === chars.length) { 
+                e.target.value = ""; charIndex = 0; loadText(); return; 
+            }
+
+            chars.forEach(s => s.classList.remove('current'));
+            if(chars[charIndex]) {
+                chars[charIndex].classList.add('current');
+                // Auto-scroll logic
+                if (charIndex % 20 === 0) chars[charIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            updateStats();
+        });
+
+        function updateStats() {
+            let elapsed = maxTime - timeLeft;
+            if (elapsed <= 0) elapsed = 1;
+            let wpm = Math.round(((totalTyped - mistakes) / 5) / (elapsed / 60));
+            document.getElementById('liveWpm').innerText = wpm < 0 ? 0 : wpm;
+            let acc = totalTyped > 0 ? Math.round(((totalTyped - mistakes) / totalTyped) * 100) : 100;
+            document.getElementById('liveAcc').innerText = acc + "%";
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                if(timeLeft > 0) {
+                    timeLeft--;
+                    document.getElementById('timer').innerText = formatTime(timeLeft);
+                    updateStats();
+                } else { finishTest(); }
+            }, 1000);
+        }
+
+        function formatTime(time) {
+            let m = Math.floor(time / 60);
+            let s = time % 60;
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        function finishTest() {
+            clearInterval(timerInterval);
+            document.getElementById('fWpm').innerText = document.getElementById('liveWpm').innerText;
+            document.getElementById('fAcc').innerText = document.getElementById('liveAcc').innerText;
+            document.getElementById('fMistakes').innerText = mistakes;
+            showPage('resultPage');
+        }
+    </script>
+</body>
+</html>
