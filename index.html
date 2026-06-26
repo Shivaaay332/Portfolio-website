@@ -27,49 +27,7 @@
       --btn-text-color: #0a192f;
       --laser-color: 144, 202, 249;
     }
-
-    /* 2. DAY THEME */
-    body.theme-day {
-      --primary-color: #f57f17;
-      --secondary-color: #0277bd;
-      --bg-color: linear-gradient(to bottom, #81d4fa, #b3e5fc, #fff9c4);
-      --card-bg: rgba(240, 248, 255, 0.92);
-      --text-main: #0d47a1;
-      --text-muted: #01579b;
-      --border-color: rgba(245, 127, 23, 0.5);
-      --shadow-color: rgba(1, 87, 155, 0.2);
-      --btn-text-color: #fffde7;
-      --laser-color: 245, 127, 23; 
-    }
-
-    /* 3. NATURE THEME */
-    body.theme-nature {
-      --primary-color: #c0ca33;
-      --secondary-color: #f1f8e9;
-      --bg-color: linear-gradient(to bottom, #1b5e20, #2e7d32, #4caf50);
-      --card-bg: rgba(27, 94, 32, 0.95);
-      --text-main: #f1f8e9;
-      --text-muted: #c8e6c9;
-      --border-color: rgba(192, 202, 51, 0.5);
-      --shadow-color: rgba(10, 35, 12, 0.7);
-      --btn-text-color: #1b5e20;
-      --laser-color: 192, 202, 51;
-    }
-
-    /* 4. PARTY THEME */
-    body.theme-party {
-      --primary-color: #e040fb;
-      --secondary-color: #18ffff;
-      --bg-color: linear-gradient(to bottom, #120024, #2a004f, #0d001a);
-      --card-bg: rgba(18, 0, 36, 0.95);
-      --text-main: #f3e5f5;
-      --text-muted: #b39ddb;
-      --border-color: rgba(224, 64, 251, 0.5);
-      --shadow-color: rgba(0, 0, 0, 0.8);
-      --btn-text-color: #120024;
-      --laser-color: 224, 64, 251;
-    }
-
+    
     /* =========================================
        GLOBAL STYLES & CUSTOM CURSOR
        ========================================= */
@@ -472,9 +430,9 @@
       </div>
 
       <div class="about-info">
-        <h3>Frontend Developer</h3>
+        <h3>Full Stack Developer</h3>
         <p>
-          Detail-oriented Frontend Developer equipped with a solid foundation in modern web technologies, including React.js and JavaScript. I specialize in crafting responsive, mobile-first designs and translating complex concepts into functional web experiences.
+         Detail-oriented Full Stack Developer equipped with a solid foundation in modern web technologies across both frontend and backend. I specialize in building end-to-end scalable applications, seamlessly integrating responsive, mobile-first designs with robust server-side architectures.
         </p>
 
         <ul class="info-list">
@@ -537,122 +495,7 @@
     </div>
   </section>
 
-  <section id="projects" class="section reveal">
-    <h2 class="section-title">My Project Library</h2>
-    
-    <div class="projects-controls">
-      <input type="text" id="searchInput" class="search-bar" placeholder="Search projects (e.g., Ludo, Typing)...">
-      
-      <div class="filter-container">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="game">Games</button>
-        <button class="filter-btn" data-filter="app">Apps</button>
-        <button class="filter-btn" data-filter="puzzle">Puzzles</button>
-      </div>
-    </div>
-
-    <div class="projects-grid" id="projectsGrid">
-      
-      <div class="project-card" data-category="game">
-        <div class="badge-container"><span class="badge">Live Game</span></div>
-        <i class="fas fa-dice project-icon"></i>
-        <h3>Ludo Pro Max</h3>
-        <p>Engineered a fully interactive multiplayer Ludo game using JavaScript. Features complex logic, safe zones, win conditions, and smooth DOM animations.</p>
-        <a href="https://ludopromax.onrender.com/" target="_blank" class="btn btn-outline project-link-btn">Play Live <i class="fas fa-external-link-alt"></i></a>
-      </div>
-
-      <div class="project-card" data-category="game">
-        <div class="badge-container"><span class="badge">Game</span></div>
-        <i class="fas fa-dice-d20 project-icon"></i>
-        <h3>Ultimate Ludo Pro</h3>
-        <p>Real 3D tokens, gaming room vibe, and smart AI strategy.</p>
-        <a href="Ludogame/index.html" class="btn btn-outline project-link-btn">Play Game</a>
-      </div>
-
-      <div class="project-card" data-category="game">
-        <div class="badge-container"><span class="badge">Game</span></div>
-        <i class="fas fa-user-injured project-icon"></i>
-        <h3>Hangman</h3>
-        <p>Word guessing game. Save the man with your vocabulary skills!</p>
-        <a href="Hangman/index.html" class="btn btn-outline project-link-btn">Play Game</a>
-      </div>
-
-      <div class="project-card" data-category="puzzle">
-        <div class="badge-container"><span class="badge" style="background:#e040fb;">Puzzle</span></div>
-        <i class="fas fa-brain project-icon"></i>
-        <h3>Mind Game</h3>
-        <p>Test your memory power with this engaging card matching puzzle.</p>
-        <a href="MindGame/index.html" class="btn btn-outline project-link-btn">Play Game</a>
-      </div>
-
-      <div class="project-card" data-category="game">
-        <div class="badge-container"><span class="badge">Game</span></div>
-        <i class="fas fa-chess-knight project-icon"></i>
-        <h3>ChessMaster</h3>
-        <p>Challenge an Expert AI and test your strategic thinking on the board.</p>
-        <a href="ChessMaster/index.html" class="btn btn-outline project-link-btn">Play Game</a>
-      </div>
-
-      <div class="project-card" data-category="game">
-        <div class="badge-container"><span class="badge">Game</span></div>
-        <i class="fas fa-times project-icon"></i>
-        <h3>Tic Tac Toe</h3>
-        <p>The classic X vs O strategy game crafted with a beautiful modern UI.</p>
-        <a href="TicTacToe/index.html" class="btn btn-outline project-link-btn">Play Game</a>
-      </div>
-
-      <div class="project-card" data-category="puzzle">
-        <div class="badge-container"><span class="badge" style="background:#e040fb;">Puzzle</span></div>
-        <i class="fas fa-puzzle-piece project-icon"></i>
-        <h3>Maze Puzzle</h3>
-        <p>Solve the complex maze path and find your way out to win.</p>
-        <a href="MazeGame/index.html" class="btn btn-outline project-link-btn">Play Game</a>
-      </div>
-
-      <div class="project-card" data-category="game">
-        <div class="badge-container"><span class="badge">Game</span></div>
-        <i class="fas fa-car-side project-icon"></i>
-        <h3>Speed Racer Pro</h3>
-        <p>Dodge traffic, collect fuel & beat the High Score! Real Graphics included.</p>
-        <a href="CarGame/index.html" class="btn btn-outline project-link-btn">Play Now</a>
-      </div>
-
-      <div class="project-card" data-category="game">
-        <div class="badge-container"><span class="badge">Game</span></div>
-        <i class="fas fa-rocket project-icon"></i>
-        <h3>Space Waves</h3>
-        <p>Hold to fly Up, release to Dive. Slide on walls, dodge spikes & beat the high score!</p>
-        <a href="SpaceWaves/index.html" class="btn btn-outline project-link-btn">Play Now</a>
-      </div>
-
-      <div class="project-card" data-category="game">
-        <div class="badge-container"><span class="badge">Game</span></div>
-        <i class="fas fa-dragon project-icon"></i>
-        <h3>Ultimate Snake Pro</h3>
-        <p>Eat Food, dodge Poison, grab Power-ups & unlock new Levels!</p>
-        <a href="snake_final/index.html" class="btn btn-outline project-link-btn">Play Now</a>
-      </div>
-
-      <div class="project-card" data-category="puzzle">
-        <div class="badge-container"><span class="badge" style="background:#e040fb;">Puzzle</span></div>
-        <i class="fas fa-border-all project-icon"></i>
-        <h3>Master Sudoku</h3>
-        <p>Classic logic puzzle with Neon Theme, Undo, Hints, Notes & Timer features.</p>
-        <a href="SudokuGame/index.html" class="btn btn-outline project-link-btn">Play Now</a>
-      </div>
-
-      <div class="project-card" data-category="app">
-        <div class="badge-container"><span class="badge" style="background:#4caf50;">App</span></div>
-        <i class="fas fa-keyboard project-icon"></i>
-        <h3>TypeMaster</h3>
-        <p>Test and improve your typing speed and accuracy with real-time feedback.</p>
-        <a href="TypeMaster/index.html" class="btn btn-outline project-link-btn">Open App</a>
-      </div>
-
-    </div>
-    <div id="no-results">No projects found matching your search.</div>
-  </section>
-
+  
   <section id="certificates" class="section reveal">
     <h2 class="section-title">Certifications</h2>
     <div class="cert-container">
@@ -909,108 +752,10 @@
         }
       }
     }
-
-    function animateBackground() {
-      animCtx.clearRect(0, 0, animCanvas.width, animCanvas.height);
-      const theme = themes[currentThemeIndex].id;
-
-      if(theme === 'night') {
-        if(Math.random() < 0.005 && animationElements.length < 2) {
-          animationElements.push({
-            type: 'star',
-            x: Math.random() * animCanvas.width,
-            y: 0,
-            length: 0,
-            maxLength: 150 + Math.random()*100,
-            speedX: 5 + Math.random()*5,
-            speedY: 5 + Math.random()*5,
-            opacity: 1
-          });
-        }
-
-        for(let i = animationElements.length-1; i >= 0; i--) {
-          let star = animationElements[i];
-          star.x -= star.speedX;
-          star.y += star.speedY;
-          if(star.length < star.maxLength) star.length += 10;
-          else star.opacity -= 0.02;
-
-          animCtx.beginPath();
-          animCtx.moveTo(star.x, star.y);
-          animCtx.lineTo(star.x + star.length, star.y - star.length * (star.speedY/star.speedX));
-          animCtx.strokeStyle = `rgba(255, 255, 255, ${star.opacity})`;
-          animCtx.lineWidth = 2;
-          animCtx.stroke();
-
-          if(star.opacity <= 0 || star.y > animCanvas.height) {
-            animationElements.splice(i, 1);
-          }
-        }
-      } 
-      
-      else if(theme === 'nature') {
-        for(let el of animationElements) {
-          if(el.type === 'water') {
-            el.y += el.speed;
-            if(el.y > animCanvas.height) el.y = -el.length;
-            animCtx.beginPath();
-            animCtx.moveTo(el.x, el.y);
-            animCtx.lineTo(el.x, el.y + el.length);
-            animCtx.strokeStyle = 'rgba(255,255,255,0.2)';
-            animCtx.lineWidth = 2;
-            animCtx.stroke();
-          }
-          if(el.type === 'bird') {
-            el.x += el.speed;
-            if(el.x > animCanvas.width + el.size) el.x = -el.size;
-            el.wingFlap += 0.1;
-            
-            animCtx.save();
-            animCtx.translate(el.x, el.y);
-            animCtx.fillStyle = 'rgba(255,255,255,0.8)';
-            animCtx.beginPath();
-            let wingY = Math.sin(el.wingFlap) * (el.size/3);
-            animCtx.moveTo(0, 0);
-            animCtx.quadraticCurveTo(-el.size/2, wingY - el.size/4, -el.size, wingY);
-            animCtx.quadraticCurveTo(-el.size/2, 0, 0, el.size/5);
-            animCtx.quadraticCurveTo(el.size/2, 0, el.size, wingY);
-            animCtx.quadraticCurveTo(el.size/2, wingY - el.size/4, 0, 0);
-            animCtx.fill();
-            animCtx.restore();
-          }
-        }
-      }
-
-      else if(theme === 'party') {
-        animCtx.globalCompositeOperation = 'screen';
-        for(let el of animationElements) {
-          el.angle += el.swingSpeed;
-          let currentAngle = Math.PI/2 + Math.sin(el.angle) * 0.8;
-          
-          animCtx.beginPath();
-          animCtx.moveTo(el.x, el.y);
-          animCtx.arc(el.x, el.y, animCanvas.height * 1.5, currentAngle - 0.2, currentAngle + 0.2);
-          animCtx.lineTo(el.x, el.y);
-          
-          let grad = animCtx.createRadialGradient(el.x, el.y, 0, el.x, el.y, animCanvas.height);
-          grad.addColorStop(0, el.color);
-          grad.addColorStop(1, 'transparent');
-          animCtx.fillStyle = grad;
-          animCtx.fill();
-        }
-        animCtx.globalCompositeOperation = 'source-over';
-      }
-
-      requestAnimationFrame(animateBackground);
-    }
-    
-    initBackgroundAnimation();
-    animateBackground();
-
     /* =========================================
        6. HERO TYPING EFFECT
        ========================================= */
-    const textArray = ["A Frontend Developer.", "A UI/UX Enthusiast.", "A Problem Solver.", "A Tech Explorer."];
+    const textArray = ["A Full-Stack Developer.", "A UI/UX Enthusiast.", "A Problem Solver.", "A Tech Explorer."];
     let typeText = document.getElementById("typewriter");
     let textIdx = 0; let charIdx = 0; let isDeleting = false;
     
