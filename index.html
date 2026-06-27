@@ -1,467 +1,955 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shivam Parmar | Full-Stack Developer</title>
-  
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shivam Parmar | Full-Stack Developer</title>
 
-  <style>
-    /* =========================================
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+
+    <style>
+      /* =========================================
        CLEAN DARK THEME VARIABLES
        ========================================= */
-    :root {
-      --primary-color: #38bdf8; /* Light Sky Blue */
-      --secondary-color: #e2e8f0; /* Soft White */
-      --bg-color: #0f172a; /* Deep Slate Background */
-      --card-bg: #1e293b; /* Slightly lighter slate for cards */
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --border-color: #334155;
-      --btn-text-color: #0f172a;
-      --shadow-color: rgba(0, 0, 0, 0.4);
-    }
+      :root {
+        --primary-color: #38bdf8; /* Light Sky Blue */
+        --secondary-color: #e2e8f0; /* Soft White */
+        --bg-color: #0f172a; /* Deep Slate Background */
+        --card-bg: #1e293b; /* Slightly lighter slate for cards */
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+        --btn-text-color: #0f172a;
+        --shadow-color: rgba(0, 0, 0, 0.4);
+      }
 
-    /* =========================================
+      /* =========================================
        GLOBAL STYLES
        ========================================= */
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-      font-family: "Poppins", sans-serif;
-    }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
 
-    html { scroll-behavior: smooth; }
+      html {
+        scroll-behavior: smooth;
+      }
 
-    body {
-      background: var(--bg-color); color: var(--text-main); line-height: 1.6;
-      overflow-x: hidden; min-height: 100vh;
-    }
+      body {
+        background: var(--bg-color);
+        color: var(--text-main);
+        line-height: 1.6;
+        overflow-x: hidden;
+        min-height: 100vh;
+      }
 
-    a, button, input, textarea { text-decoration: none; color: inherit; }
-    ul { list-style: none; }
+      a,
+      button,
+      input,
+      textarea {
+        text-decoration: none;
+        color: inherit;
+      }
+      ul {
+        list-style: none;
+      }
 
-    /* =========================================
+      /* =========================================
        HEADER & NAV
        ========================================= */
-    header {
-      position: fixed; top: 0; width: 100%; background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--border-color); z-index: 1000;
-    }
-    .navbar {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 1.2rem 5%; max-width: 1200px; margin: 0 auto;
-    }
-    .logo { font-size: 1.5rem; font-weight: 700; color: var(--secondary-color); transition: 0.3s; }
-    .logo span { color: var(--primary-color); }
-    
-    .nav-actions { display: flex; align-items: center; gap: 2rem; }
-    .nav-links { display: flex; gap: 1.5rem; }
-    .nav-links a { font-weight: 500; font-size: 0.95rem; position: relative; color: var(--text-main); transition: color 0.3s;}
-    .nav-links a:hover { color: var(--primary-color); }
-    .hamburger { display: none; font-size: 1.5rem; color: var(--text-main); cursor: pointer;}
+      header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: rgba(30, 41, 59, 0.95);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--border-color);
+        z-index: 1000;
+      }
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.2rem 5%;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--secondary-color);
+        transition: 0.3s;
+      }
+      .logo span {
+        color: var(--primary-color);
+      }
 
-    /* =========================================
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+      .nav-links {
+        display: flex;
+        gap: 1.5rem;
+      }
+      .nav-links a {
+        font-weight: 500;
+        font-size: 0.95rem;
+        position: relative;
+        color: var(--text-main);
+        transition: color 0.3s;
+      }
+      .nav-links a:hover {
+        color: var(--primary-color);
+      }
+      .hamburger {
+        display: none;
+        font-size: 1.5rem;
+        color: var(--text-main);
+        cursor: pointer;
+      }
+
+      /* =========================================
        COMMON COMPONENTS
        ========================================= */
-    .reveal { opacity: 0; transform: translateY(30px); transition: 0.6s ease-out; }
-    .reveal.active { opacity: 1; transform: translateY(0); }
-    
-    .section { padding: 6rem 5%; max-width: 1200px; margin: 0 auto;}
-    .section-title {
-      text-align: center; font-size: 2.2rem; color: var(--secondary-color);
-      margin-bottom: 3.5rem; position: relative; font-weight: 700;
-    }
-    .section-title::after {
-      content: ""; display: block; width: 60px; height: 4px; background: var(--primary-color);
-      margin: 10px auto 0; border-radius: 2px;
-    }
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: 0.6s ease-out;
+      }
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
 
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      padding: 0.8rem 2rem; border-radius: 8px; font-weight: 600;
-      transition: all 0.3s ease; border: none; font-size: 0.95rem; cursor: pointer;
-    }
-    .btn-primary { background: var(--primary-color); color: var(--btn-text-color); box-shadow: 0 4px 15px var(--shadow-color); }
-    .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.1); }
-    .btn-outline { border: 2px solid var(--primary-color); color: var(--primary-color); background: transparent; }
-    .btn-outline:hover { background: var(--primary-color); color: var(--btn-text-color); }
+      .section {
+        padding: 6rem 5%;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .section-title {
+        text-align: center;
+        font-size: 2.2rem;
+        color: var(--secondary-color);
+        margin-bottom: 3.5rem;
+        position: relative;
+        font-weight: 700;
+      }
+      .section-title::after {
+        content: "";
+        display: block;
+        width: 60px;
+        height: 4px;
+        background: var(--primary-color);
+        margin: 10px auto 0;
+        border-radius: 2px;
+      }
 
-    /* =========================================
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 0.8rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        font-size: 0.95rem;
+        cursor: pointer;
+      }
+      .btn-primary {
+        background: var(--primary-color);
+        color: var(--btn-text-color);
+        box-shadow: 0 4px 15px var(--shadow-color);
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.1);
+      }
+      .btn-outline {
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+        background: transparent;
+      }
+      .btn-outline:hover {
+        background: var(--primary-color);
+        color: var(--btn-text-color);
+      }
+
+      /* =========================================
        HERO SECTION
        ========================================= */
-    .hero {
-      min-height: 100vh; display: flex; align-items: center; justify-content: center;
-      text-align: center; padding: 0 5%; padding-top: 80px;
-    }
-    .hero-content { max-width: 800px; }
-    .hero-content h3 { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 0.5rem; font-weight: 500;}
-    .hero-content h1 { font-size: 3.5rem; color: var(--secondary-color); margin-bottom: 1.5rem; font-weight: 700; line-height: 1.2;}
-    .hero-content p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2.5rem; max-width: 600px; margin-inline: auto;}
-    
-    /* =========================================
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 0 5%;
+        padding-top: 80px;
+      }
+      .hero-content {
+        max-width: 800px;
+      }
+      .hero-content h3 {
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+      }
+      .hero-content h1 {
+        font-size: 3.5rem;
+        color: var(--secondary-color);
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+      .hero-content p {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        margin-bottom: 2.5rem;
+        max-width: 600px;
+        margin-inline: auto;
+      }
+
+      /* =========================================
        ABOUT SECTION
        ========================================= */
-    .about-container { display: grid; grid-template-columns: 1fr 1.5fr; gap: 4rem; align-items: center; }
-    .profile-img {
-      width: 100%; max-width: 320px; height: 320px; object-fit: cover; border-radius: 12px;
-      border: 2px solid var(--border-color); box-shadow: 0 10px 30px var(--shadow-color);
-      display: block; margin: auto;
-    }
-    .about-info h3 { margin-bottom: 1rem; color: var(--secondary-color); font-size: 1.8rem; }
-    .about-info p { color: var(--text-muted); margin-bottom: 1.5rem; font-size: 1.05rem; }
-    .info-list { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;}
-    .info-list li {
-      display: flex; flex-direction: column; color: var(--text-main); font-size: 0.95rem;
-      background: var(--card-bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);
-    }
-    .info-list span { font-weight: 600; color: var(--primary-color); margin-bottom: 4px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;}
+      .about-container {
+        display: grid;
+        grid-template-columns: 1fr 1.5fr;
+        gap: 4rem;
+        align-items: center;
+      }
+      .profile-img {
+        width: 100%;
+        max-width: 320px;
+        height: 320px;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 2px solid var(--border-color);
+        box-shadow: 0 10px 30px var(--shadow-color);
+        display: block;
+        margin: auto;
+      }
+      .about-info h3 {
+        margin-bottom: 1rem;
+        color: var(--secondary-color);
+        font-size: 1.8rem;
+      }
+      .about-info p {
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+        font-size: 1.05rem;
+      }
+      .info-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      .info-list li {
+        display: flex;
+        flex-direction: column;
+        color: var(--text-main);
+        font-size: 0.95rem;
+        background: var(--card-bg);
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+      }
+      .info-list span {
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 4px;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
 
-    /* =========================================
+      /* =========================================
        SKILLS SECTION
        ========================================= */
-    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-    .skill-card {
-      background: var(--card-bg); padding: 2rem; border-radius: 12px;
-      border: 1px solid var(--border-color); transition: 0.3s;
-    }
-    .skill-card:hover { border-color: var(--primary-color); transform: translateY(-3px);}
-    .skill-card h4 { margin-bottom: 1rem; color: var(--secondary-color); font-size: 1.2rem; display: flex; align-items: center; gap: 10px;}
-    .skill-card h4 i { color: var(--primary-color); font-size: 1.5rem;}
-    .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-    .skill-tags span { background: var(--bg-color); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; color: var(--text-main);}
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+      }
+      .skill-card {
+        background: var(--card-bg);
+        padding: 2rem;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        transition: 0.3s;
+      }
+      .skill-card:hover {
+        border-color: var(--primary-color);
+        transform: translateY(-3px);
+      }
+      .skill-card h4 {
+        margin-bottom: 1rem;
+        color: var(--secondary-color);
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .skill-card h4 i {
+        color: var(--primary-color);
+        font-size: 1.5rem;
+      }
+      .skill-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .skill-tags span {
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        color: var(--text-main);
+      }
 
-    /* =========================================
+      /* =========================================
        PROJECTS SECTION
        ========================================= */
-    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
-    .project-card {
-      background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border-color); 
-      padding: 2rem; display: flex; flex-direction: column; transition: 0.3s;
-    }
-    .project-card:hover { border-color: var(--primary-color); transform: translateY(-3px); }
-    .project-card h3 { margin-bottom: 0.5rem; color: var(--secondary-color); font-size: 1.4rem; font-weight: 600;}
-    .project-tech { font-size: 0.85rem; color: var(--primary-color); margin-bottom: 1rem; font-family: 'Fira Code', monospace;}
-    .project-card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; flex-grow: 1;}
-    .project-links-wrap { display: flex; gap: 10px; margin-top: auto;}
-    .project-links-wrap .btn { flex: 1; padding: 0.6rem; font-size: 0.85rem; border-radius: 6px;}
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 2rem;
+      }
+      .project-card {
+        background: var(--card-bg);
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        transition: 0.3s;
+      }
+      .project-card:hover {
+        border-color: var(--primary-color);
+        transform: translateY(-3px);
+      }
+      .project-card h3 {
+        margin-bottom: 0.5rem;
+        color: var(--secondary-color);
+        font-size: 1.4rem;
+        font-weight: 600;
+      }
+      .project-tech {
+        font-size: 0.85rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        font-family: "Fira Code", monospace;
+      }
+      .project-card p {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+        flex-grow: 1;
+      }
+      .project-links-wrap {
+        display: flex;
+        gap: 10px;
+        margin-top: auto;
+      }
+      .project-links-wrap .btn {
+        flex: 1;
+        padding: 0.6rem;
+        font-size: 0.85rem;
+        border-radius: 6px;
+      }
 
-    /* =========================================
+      /* =========================================
        CERTIFICATES SECTION
        ========================================= */
-    .cert-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-    .cert-card {
-      background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border-color);
-      padding: 1.5rem; text-align: left; display: flex; flex-direction: column; justify-content: space-between;
-    }
-    .cert-title { font-size: 1.1rem; color: var(--secondary-color); margin-bottom: 0.5rem; font-weight: 600;}
-    .cert-issuer { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 6px;}
-    .cert-issuer i { color: var(--primary-color); }
-    .cert-card .btn { width: 100%; padding: 0.5rem; font-size: 0.85rem;}
+      .cert-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+      }
+      .cert-card {
+        background: var(--card-bg);
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        padding: 1.5rem;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .cert-title {
+        font-size: 1.1rem;
+        color: var(--secondary-color);
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+      .cert-issuer {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .cert-issuer i {
+        color: var(--primary-color);
+      }
+      .cert-card .btn {
+        width: 100%;
+        padding: 0.5rem;
+        font-size: 0.85rem;
+      }
 
-    /* =========================================
+      /* =========================================
        CONTACT SECTION
        ========================================= */
-    .contact-container { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
-    .contact-info-box h3 { font-size: 1.8rem; color: var(--secondary-color); margin-bottom: 1rem;}
-    .contact-info-box p { color: var(--text-muted); margin-bottom: 2rem;}
-    
-    .contact-item { margin-bottom: 1.5rem; display: flex; align-items: flex-start; gap: 1rem; }
-    .contact-item i { color: var(--primary-color); font-size: 1.2rem; margin-top: 4px; }
-    .contact-item h4 { color: var(--text-main); font-size: 1rem; margin-bottom: 2px;}
-    .contact-item p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0;}
+      .contact-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+      }
+      .contact-info-box h3 {
+        font-size: 1.8rem;
+        color: var(--secondary-color);
+        margin-bottom: 1rem;
+      }
+      .contact-info-box p {
+        color: var(--text-muted);
+        margin-bottom: 2rem;
+      }
 
-    .contact-form { background: var(--card-bg); padding: 2.5rem; border-radius: 12px; border: 1px solid var(--border-color);}
-    .contact-form input, .contact-form textarea {
-      width: 100%; padding: 1rem; margin-bottom: 1.2rem; background: var(--bg-color);
-      border: 1px solid var(--border-color); color: var(--text-main); border-radius: 6px; font-size: 0.95rem;
-    }
-    .contact-form input:focus, .contact-form textarea:focus { outline: none; border-color: var(--primary-color); }
+      .contact-item {
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      .contact-item i {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+        margin-top: 4px;
+      }
+      .contact-item h4 {
+        color: var(--text-main);
+        font-size: 1rem;
+        margin-bottom: 2px;
+      }
+      .contact-item p {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        margin-bottom: 0;
+      }
 
-    footer { text-align: center; padding: 2rem; margin-top: 4rem; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.9rem;}
+      .contact-form {
+        background: var(--card-bg);
+        padding: 2.5rem;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+      }
+      .contact-form input,
+      .contact-form textarea {
+        width: 100%;
+        padding: 1rem;
+        margin-bottom: 1.2rem;
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        border-radius: 6px;
+        font-size: 0.95rem;
+      }
+      .contact-form input:focus,
+      .contact-form textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+      }
 
-    /* =========================================
+      footer {
+        text-align: center;
+        padding: 2rem;
+        margin-top: 4rem;
+        border-top: 1px solid var(--border-color);
+        color: var(--text-muted);
+        font-size: 0.9rem;
+      }
+
+      /* =========================================
        RESPONSIVE DESIGN (MOBILE FRIENDLY)
        ========================================= */
-    @media (max-width: 900px) {
-      .navbar { padding: 1rem 5%; }
-      .hamburger { display: block; }
-      .nav-actions {
-        position: absolute; top: 100%; left: 0; width: 100%; background: var(--card-bg);
-        flex-direction: column; text-align: center; padding: 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease;
-        border-bottom: 1px solid var(--border-color);
-      }
-      .nav-actions.active { max-height: 400px; padding: 1.5rem 0; }
-      .nav-links { flex-direction: column; gap: 1.5rem; width: 100%; }
-      
-      .hero-content h1 { font-size: 2.5rem; }
-      .about-container, .contact-container { grid-template-columns: 1fr; gap: 2.5rem;}
-      .profile-img { width: 250px; height: 250px; }
-      .info-list { grid-template-columns: 1fr; }
-      .section { padding: 4rem 5%; }
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <nav class="navbar">
-      <a href="#" class="logo"><span>Shivam</span> Parmar</a>
-      <div class="hamburger"><i class="fas fa-bars"></i></div>
-      <div class="nav-actions">
-        <ul class="nav-links">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#skills">Skills</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#certificates">Certificates</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </div>
-    </nav>
-  </header>
-
-  <section id="home" class="hero">
-    <div class="hero-content reveal">
-      <h3>Hi, I am Shivam Parmar</h3>
-      <h1>Building Scalable Full-Stack Applications</h1>
-      <p>A results-driven Full-Stack Developer specializing in the MERN stack and Next.js ecosystem. I build complex, real-time web applications with clean code and robust server-side architectures.</p>
-      <div style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
-        <a href="#projects" class="btn btn-primary"><i class="fas fa-code"></i> View Projects</a>
-        <a href="Shivam_Pamrar_DEV.pdf" download class="btn btn-outline"><i class="fas fa-file-download"></i> Download Resume</a>
-      </div>
-    </div>
-  </section>
-
-  <section id="about" class="section reveal">
-    <h2 class="section-title">About Me</h2>
-    <div class="about-container">
-      <img src="Profile.jpeg" alt="Shivam Parmar" class="profile-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4140/4140048.png'" />
-      
-      <div class="about-info">
-        <h3>Full-Stack Developer</h3>
-        <p>
-          I am a recent B.Tech CSE graduate with strong expertise in modern web technologies. I am experienced in designing complex applications featuring WebSockets, AI-driven automation (OCR/NLP), and secure REST APIs. I am passionate about writing optimized code and eager to bring technical adaptability to forward-thinking teams.
-        </p>
-
-        <ul class="info-list">
-          <li><span>Degree</span> B.Tech CSE (6.64 CGPA)</li>
-          <li><span>University</span> RGPV (SAIT, Indore)</li>
-          <li><span>Location</span> Indore, MP, India (452015)</li>
-          <li><span>Experience</span> Fresher / Project-driven</li>
-          <li><span>Email</span> shivaaay332@gmail.com</li>
-          <li><span>Phone</span> +91 7389286618</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section id="skills" class="section reveal">
-    <h2 class="section-title">Technical Expertise</h2>
-    <div class="skills-grid">
-      
-      <div class="skill-card">
-        <h4><i class="fas fa-laptop-code"></i> Languages</h4>
-        <div class="skill-tags">
-          <span>JavaScript</span><span>TypeScript</span><span>Python</span><span>SQL</span><span>HTML5</span><span>CSS3</span>
-        </div>
-      </div>
-
-      <div class="skill-card">
-        <h4><i class="fab fa-react"></i> Frontend</h4>
-        <div class="skill-tags">
-          <span>React.js</span><span>Next.js</span><span>Redux Toolkit</span><span>Zustand</span><span>Tailwind CSS</span><span>Vite</span><span>PWA</span>
-        </div>
-      </div>
-
-      <div class="skill-card">
-        <h4><i class="fab fa-node-js"></i> Backend</h4>
-        <div class="skill-tags">
-          <span>Node.js</span><span>Express.js</span><span>Socket.IO</span><span>Prisma ORM</span><span>REST APIs</span>
-        </div>
-      </div>
-
-      <div class="skill-card">
-        <h4><i class="fas fa-database"></i> Database & Cloud</h4>
-        <div class="skill-tags">
-          <span>MongoDB</span><span>PostgreSQL</span><span>IndexedDB</span><span>Vercel</span><span>Render</span>
-        </div>
-      </div>
-
-      <div class="skill-card">
-        <h4><i class="fas fa-tools"></i> Tools & Libraries</h4>
-        <div class="skill-tags">
-          <span>Git & GitHub</span><span>Postman</span><span>Linux</span><span>JWT & Bcrypt</span><span>Tesseract.js</span><span>Web Audio API</span><span>Recharts</span>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <section id="projects" class="section reveal">
-    <h2 class="section-title">Featured Projects</h2>
-    <div class="projects-grid">
-      
-      <div class="project-card">
-        <h3>Ludo Pro Max</h3>
-        <div class="project-tech">React | Node.js | Socket.IO | PostgreSQL</div>
-        <p>A 4-player real-time multiplayer web game. Engineered robust room management, live chat, and a pseudo-random dice algorithm for fair pacing. Designed a PostgreSQL database to track player stats and power a global leaderboard.</p>
-        <div class="project-links-wrap">
-          <a href="https://github.com/Shivaaay332/Ludo-pro-max" class="btn btn-outline" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-          <a href="https://ludo-pro-max.vercel.app/" class="btn btn-primary" target="_blank"><i class="fas fa-external-link-alt"></i> Live App</a>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <h3>TrackOne Money</h3>
-        <div class="project-tech">React | Node.js | MongoDB | Tesseract.js</div>
-        <p>A Progressive Web App (PWA) for finance tracking. Includes OCR/NLP capabilities using Tesseract.js, offline caching with IndexedDB, interactive dashboards using Recharts, and secure JWT-based backend architecture.</p>
-        <div class="project-links-wrap">
-          <a href="https://github.com/Shivaaay332/TrackOne-Money" class="btn btn-outline" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-          <a href="https://trackone-money.vercel.app/" class="btn btn-primary" target="_blank"><i class="fas fa-external-link-alt"></i> Live App</a>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <h3>Dhwani (Audio Streaming)</h3>
-        <div class="project-tech">Next.js 16 | React 19 | Express | Prisma</div>
-        <p>A high-performance audio streaming platform. Built scalable data models using Prisma ORM, implemented dynamic search functionality, and crafted a modern UI with Tailwind CSS v4 and the React Compiler.</p>
-        <div class="project-links-wrap">
-          <a href="https://github.com/Shivaaay332/Dhwani" class="btn btn-outline" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-          <a href="https://dhwani-theta.vercel.app/" class="btn btn-primary" target="_blank"><i class="fas fa-external-link-alt"></i> Live App</a>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <section id="certificates" class="section reveal">
-    <h2 class="section-title">Certifications</h2>
-    <div class="cert-grid">
-      
-      <div class="cert-card">
-        <div>
-          <h3 class="cert-title">Web Development Fundamentals</h3>
-          <p class="cert-issuer"><i class="fas fa-award"></i> IBM SkillsBuild</p>
-        </div>
-        <a href="https://www.credly.com/badges/baaa59d8-2814-4770-9353-ff8be1170a3d" target="_blank" class="btn btn-outline">Verify Credential</a>
-      </div>
-
-      <div class="cert-card">
-        <div>
-          <h3 class="cert-title">Artificial Intelligence Fundamentals</h3>
-          <p class="cert-issuer"><i class="fas fa-award"></i> IBM SkillsBuild</p>
-        </div>
-        <a href="https://www.credly.com/badges/a8e7d946-942c-44b8-9470-0cdeb96db420" target="_blank" class="btn btn-outline">Verify Credential</a>
-      </div>
-
-      <div class="cert-card">
-        <div>
-          <h3 class="cert-title">Full Stack Developer Course</h3>
-          <p class="cert-issuer"><i class="fas fa-award"></i> Simplilearn SkillUp</p>
-        </div>
-        <a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiI1MjYxIiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvMTAzOTA1MzdfMTAxMzcwMTZfMTc4MjM2MTMwMzAxNy5wbmciLCJ1c2VybmFtZSI6IlNISVZBTSBQQVJNQVIifQ%3D%3D&utm_source=shared-certificate&utm_medium=lms&utm_campaign=shared-certificate-promotion&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F8252%2FFree-Full-Stack-Developer-Course%2Fcertificate%2Fdownload-skillup&%24web_only=true&_branch_match_id=1571447080624868837&_branch_referrer=H4sIAAAAAAAAA8soKSkottLXL87MLcjJ1EssKNDLyczL1k%2FVDypwyzcMzSlPM0myrytKTUstKsrMS49PKsovL04tsnXOKMrPTQUAwpXeGz8AAAA%3D" target="_blank" class="btn btn-outline">Verify Credential</a>
-      </div>
-
-      <div class="cert-card">
-        <div>
-          <h3 class="cert-title">JavaScript for Beginners</h3>
-          <p class="cert-issuer"><i class="fas fa-award"></i> Simplilearn SkillUp</p>
-        </div>
-        <a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIxNzI0IiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvMTAzODg3NzRfMTAxMzcwMTZfMTc4MjMxMzI5MTgyMi5wbmciLCJ1c2VybmFtZSI6IlNISVZBTSBQQVJNQVIifQ&utm_source=shared-certificate&utm_medium=app_lms&utm_campaign=shared-certificate-promotion&referrer=https%3A%2F%2Fcertificates.simplicdn.net%2Fshare%2F10388774_10137016_1782313291822.png&_branch_match_id=1571447080624868837&_branch_referrer=H4sIAAAAAAAAA8soKSkottLXL87MLcjJ1EssKNDLyczL1k80Man0dktySjVJsq8rSk1LLSrKzEuPTyrKLy9OLbJ1zijKz00FADb%2B%2BXk9AAAA" target="_blank" class="btn btn-outline">Verify Credential</a>
-      </div>
-
-      <div class="cert-card">
-        <div>
-          <h3 class="cert-title">Scientific Computing with Python</h3>
-          <p class="cert-issuer"><i class="fas fa-award"></i> freeCodeCamp</p>
-        </div>
-        <a href="https://www.freecodecamp.org/certification/shivaaay_p332/scientific-computing-with-python-v7" target="_blank" class="btn btn-outline">Verify Credential</a>
-      </div>
-
-    </div>
-  </section>
-
-  <section id="contact" class="section reveal">
-    <h2 class="section-title">Get In Touch</h2>
-    <div class="contact-container">
-      
-      <div class="contact-info-box">
-        <h3>Let's Connect</h3>
-        <p>I am currently open for full-time Full-Stack Developer roles. Feel free to reach out for opportunities or collaborations.</p>
-
-        <div class="contact-item">
-          <i class="fas fa-envelope"></i>
-          <div>
-            <h4>Email</h4>
-            <p><a href="mailto:shivaaay332@gmail.com">shivaaay332@gmail.com</a></p>
-          </div>
-        </div>
-        <div class="contact-item">
-          <i class="fas fa-phone-alt"></i>
-          <div>
-            <h4>Phone</h4>
-            <p><a href="tel:+917389286618">+91 7389286618</a></p>
-          </div>
-        </div>
-        <div class="contact-item">
-          <i class="fab fa-linkedin"></i>
-          <div>
-            <h4>LinkedIn</h4>
-            <p><a href="https://www.linkedin.com/in/shivam-parmar-dev/" target="_blank">linkedin.com/in/shivam-parmar-dev</a></p>
-          </div>
-        </div>
-        <div class="contact-item">
-          <i class="fab fa-github"></i>
-          <div>
-            <h4>GitHub</h4>
-            <p><a href="https://github.com/shivaaay332/" target="_blank">github.com/shivaaay332</a></p>
-          </div>
-        </div>
-      </div>
-
-      <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-        <input type="text" name="name" placeholder="Your Full Name" required />
-        <input type="email" name="email" placeholder="Your Email Address" required />
-        <input type="text" name="subject" placeholder="Subject" />
-        <textarea name="message" rows="5" placeholder="Write your message here..." required></textarea>
-        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message <i class="fas fa-paper-plane" style="margin-left: 5px;"></i></button>
-      </form>
-    </div>
-  </section>
-
-  <footer>
-    <p>&copy; 2026 Shivam Parmar. Built with modern web technologies.</p>
-  </footer>
-
-  <script>
-    // Mobile Navigation Toggle
-    const hamburger = document.querySelector(".hamburger");
-    const navActions = document.querySelector(".nav-actions");
-    const navLinks = document.querySelectorAll(".nav-links a");
-
-    hamburger.addEventListener("click", () => {
-      navActions.classList.toggle("active");
-    });
-
-    navLinks.forEach(link => {
-      link.addEventListener("click", () => {
-        navActions.classList.remove("active");
-      });
-    });
-
-    // Simple Scroll Reveal Animation
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          revealObserver.unobserve(entry.target); // Play animation only once
+      @media (max-width: 900px) {
+        .navbar {
+          padding: 1rem 5%;
         }
+        .hamburger {
+          display: block;
+        }
+        .nav-actions {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          width: 100%;
+          background: var(--card-bg);
+          flex-direction: column;
+          text-align: center;
+          padding: 0;
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.3s ease;
+          border-bottom: 1px solid var(--border-color);
+        }
+        .nav-actions.active {
+          max-height: 400px;
+          padding: 1.5rem 0;
+        }
+        .nav-links {
+          flex-direction: column;
+          gap: 1.5rem;
+          width: 100%;
+        }
+
+        .hero-content h1 {
+          font-size: 2.5rem;
+        }
+        .about-container,
+        .contact-container {
+          grid-template-columns: 1fr;
+          gap: 2.5rem;
+        }
+        .profile-img {
+          width: 250px;
+          height: 250px;
+        }
+        .info-list {
+          grid-template-columns: 1fr;
+        }
+        .section {
+          padding: 4rem 5%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <a href="#" class="logo"><span>Shivam</span> Parmar</a>
+        <div class="hamburger"><i class="fas fa-bars"></i></div>
+        <div class="nav-actions">
+          <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#certificates">Certificates</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <section id="home" class="hero">
+      <div class="hero-content reveal">
+        <h3>Hi, I am Shivam Parmar</h3>
+        <h1>Building Scalable Full-Stack Applications</h1>
+        <p>
+          A results-driven Full-Stack Developer specializing in the MERN stack
+          and Next.js ecosystem. I build complex, real-time web applications
+          with clean code and robust server-side architectures.
+        </p>
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+          "
+        >
+          <a href="#projects" class="btn btn-primary"
+            ><i class="fas fa-code"></i> View Projects</a
+          >
+          <a href="Shivam_Pamrar_DEV.pdf" download class="btn btn-outline"
+            ><i class="fas fa-file-download"></i> Download Resume</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section reveal">
+      <h2 class="section-title">About Me</h2>
+      <div class="about-container">
+        <img
+          src="Profile.jpeg"
+          alt="Shivam Parmar"
+          class="profile-img"
+          onerror="
+            this.src = 'https://cdn-icons-png.flaticon.com/512/4140/4140048.png'
+          "
+        />
+
+        <div class="about-info">
+          <h3>Full-Stack Developer</h3>
+          <p>
+            I am a recent B.Tech CSE graduate with strong expertise in modern
+            web technologies. I am experienced in designing complex applications
+            featuring WebSockets, AI-driven automation (OCR/NLP), and secure
+            REST APIs. I am passionate about writing optimized code and eager to
+            bring technical adaptability to forward-thinking teams.
+          </p>
+
+          <ul class="info-list">
+            <li><span>Degree</span> B.Tech CSE (6.64 CGPA)</li>
+            <li><span>University</span> RGPV (SAIT, Indore)</li>
+            <li><span>Location</span> Indore, MP, India (452015)</li>
+            <li><span>Experience</span> Fresher / Project-driven</li>
+            <li><span>Email</span> shivaaay332@gmail.com</li>
+            <li><span>Phone</span> +91 7389286618</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="section reveal">
+      <h2 class="section-title">Technical Expertise</h2>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <h4><i class="fas fa-laptop-code"></i> Languages</h4>
+          <div class="skill-tags">
+            <span>JavaScript</span><span>TypeScript</span><span>Python</span
+            ><span>SQL</span><span>HTML5</span><span>CSS3</span>
+          </div>
+        </div>
+
+        <div class="skill-card">
+          <h4><i class="fab fa-react"></i> Frontend</h4>
+          <div class="skill-tags">
+            <span>React.js</span><span>Next.js</span><span>Redux Toolkit</span
+            ><span>Zustand</span><span>Tailwind CSS</span><span>Vite</span
+            ><span>PWA</span>
+          </div>
+        </div>
+
+        <div class="skill-card">
+          <h4><i class="fab fa-node-js"></i> Backend</h4>
+          <div class="skill-tags">
+            <span>Node.js</span><span>Express.js</span><span>Socket.IO</span
+            ><span>Prisma ORM</span><span>REST APIs</span>
+          </div>
+        </div>
+
+        <div class="skill-card">
+          <h4><i class="fas fa-database"></i> Database & Cloud</h4>
+          <div class="skill-tags">
+            <span>MongoDB</span><span>PostgreSQL</span><span>IndexedDB</span
+            ><span>Vercel</span><span>Render</span>
+          </div>
+        </div>
+
+        <div class="skill-card">
+          <h4><i class="fas fa-tools"></i> Tools & Libraries</h4>
+          <div class="skill-tags">
+            <span>Git & GitHub</span><span>Postman</span><span>Linux</span
+            ><span>JWT & Bcrypt</span><span>Tesseract.js</span
+            ><span>Web Audio API</span><span>Recharts</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="section reveal">
+      <h2 class="section-title">Featured Projects</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <h3>Ludo Pro Max</h3>
+          <div class="project-tech">
+            React | Node.js | Socket.IO | PostgreSQL
+          </div>
+          <p>
+            A 4-player real-time multiplayer web game. Engineered robust room
+            management, live chat, and a pseudo-random dice algorithm for fair
+            pacing. Designed a PostgreSQL database to track player stats and
+            power a global leaderboard.
+          </p>
+          <div class="project-links-wrap">
+            <a
+              href="https://github.com/Shivaaay332/Ludo-pro-max"
+              class="btn btn-outline"
+              target="_blank"
+              ><i class="fab fa-github"></i> GitHub</a
+            >
+            <a
+              href="https://ludo-pro-max.vercel.app/"
+              class="btn btn-primary"
+              target="_blank"
+              ><i class="fas fa-external-link-alt"></i> Live App</a
+            >
+          </div>
+        </div>
+
+        <div class="project-card">
+          <h3>TrackOne Money</h3>
+          <div class="project-tech">
+            React | Node.js | MongoDB | Tesseract.js
+          </div>
+          <p>
+            A Progressive Web App (PWA) for finance tracking. Includes OCR/NLP
+            capabilities using Tesseract.js, offline caching with IndexedDB,
+            interactive dashboards using Recharts, and secure JWT-based backend
+            architecture.
+          </p>
+          <div class="project-links-wrap">
+            <a
+              href="https://github.com/Shivaaay332/TrackOne-Money"
+              class="btn btn-outline"
+              target="_blank"
+              ><i class="fab fa-github"></i> GitHub</a
+            >
+            <a
+              href="https://trackone-money.vercel.app/"
+              class="btn btn-primary"
+              target="_blank"
+              ><i class="fas fa-external-link-alt"></i> Live App</a
+            >
+          </div>
+        </div>
+
+        <div class="project-card">
+          <h3>Dhwani (Audio Streaming)</h3>
+          <div class="project-tech">
+            Next.js 16 | React 19 | Express | Prisma
+          </div>
+          <p>
+            A high-performance audio streaming platform. Built scalable data
+            models using Prisma ORM, implemented dynamic search functionality,
+            and crafted a modern UI with Tailwind CSS v4 and the React Compiler.
+          </p>
+          <div class="project-links-wrap">
+            <a
+              href="https://github.com/Shivaaay332/Dhwani"
+              class="btn btn-outline"
+              target="_blank"
+              ><i class="fab fa-github"></i> GitHub</a
+            >
+            <a
+              href="https://dhwani-theta.vercel.app/"
+              class="btn btn-primary"
+              target="_blank"
+              ><i class="fas fa-external-link-alt"></i> Live App</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="certificates" class="section reveal">
+      <h2 class="section-title">Certifications</h2>
+      <div class="cert-grid">
+        <div class="cert-card">
+          <div>
+            <h3 class="cert-title">Web Development Fundamentals</h3>
+            <p class="cert-issuer">
+              <i class="fas fa-award"></i> IBM SkillsBuild
+            </p>
+          </div>
+          <a
+            href="https://www.credly.com/badges/baaa59d8-2814-4770-9353-ff8be1170a3d"
+            target="_blank"
+            class="btn btn-outline"
+            >Verify Credential</a
+          >
+        </div>
+
+        <div class="cert-card">
+          <div>
+            <h3 class="cert-title">Artificial Intelligence Fundamentals</h3>
+            <p class="cert-issuer">
+              <i class="fas fa-award"></i> IBM SkillsBuild
+            </p>
+          </div>
+          <a
+            href="https://www.credly.com/badges/a8e7d946-942c-44b8-9470-0cdeb96db420"
+            target="_blank"
+            class="btn btn-outline"
+            >Verify Credential</a
+          >
+        </div>
+
+        <div class="cert-card">
+          <div>
+            <h3 class="cert-title">Full Stack Developer Course</h3>
+            <p class="cert-issuer">
+              <i class="fas fa-award"></i> Simplilearn SkillUp
+            </p>
+          </div>
+          <a
+            href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiI1MjYxIiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvMTAzOTA1MzdfMTAxMzcwMTZfMTc4MjM2MTMwMzAxNy5wbmciLCJ1c2VybmFtZSI6IlNISVZBTSBQQVJNQVIifQ%3D%3D&utm_source=shared-certificate&utm_medium=lms&utm_campaign=shared-certificate-promotion&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F8252%2FFree-Full-Stack-Developer-Course%2Fcertificate%2Fdownload-skillup&%24web_only=true&_branch_match_id=1571447080624868837&_branch_referrer=H4sIAAAAAAAAA8soKSkottLXL87MLcjJ1EssKNDLyczL1k%2FVDypwyzcMzSlPM0myrytKTUstKsrMS49PKsovL04tsnXOKMrPTQUAwpXeGz8AAAA%3D"
+            target="_blank"
+            class="btn btn-outline"
+            >Verify Credential</a
+          >
+        </div>
+
+        <div class="cert-card">
+          <div>
+            <h3 class="cert-title">JavaScript for Beginners</h3>
+            <p class="cert-issuer">
+              <i class="fas fa-award"></i> Simplilearn SkillUp
+            </p>
+          </div>
+          <a
+            href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIxNzI0IiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvMTAzODg3NzRfMTAxMzcwMTZfMTc4MjMxMzI5MTgyMi5wbmciLCJ1c2VybmFtZSI6IlNISVZBTSBQQVJNQVIifQ&utm_source=shared-certificate&utm_medium=app_lms&utm_campaign=shared-certificate-promotion&referrer=https%3A%2F%2Fcertificates.simplicdn.net%2Fshare%2F10388774_10137016_1782313291822.png&_branch_match_id=1571447080624868837&_branch_referrer=H4sIAAAAAAAAA8soKSkottLXL87MLcjJ1EssKNDLyczL1k80Man0dktySjVJsq8rSk1LLSrKzEuPTyrKLy9OLbJ1zijKz00FADb%2B%2BXk9AAAA"
+            target="_blank"
+            class="btn btn-outline"
+            >Verify Credential</a
+          >
+        </div>
+
+        <div class="cert-card">
+          <div>
+            <h3 class="cert-title">Scientific Computing with Python</h3>
+            <p class="cert-issuer"><i class="fas fa-award"></i> freeCodeCamp</p>
+          </div>
+          <a
+            href="https://www.freecodecamp.org/certification/shivaaay_p332/scientific-computing-with-python-v7"
+            target="_blank"
+            class="btn btn-outline"
+            >Verify Credential</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section reveal">
+      <h2 class="section-title">Get In Touch</h2>
+      <div class="contact-container">
+        <div class="contact-info-box">
+          <h3>Let's Connect</h3>
+          <p>
+            I am currently open for full-time Full-Stack Developer roles. Feel
+            free to reach out for opportunities or collaborations.
+          </p>
+
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <h4>Email</h4>
+              <p>
+                <a href="mailto:shivaaay332@gmail.com">shivaaay332@gmail.com</a>
+              </p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-phone-alt"></i>
+            <div>
+              <h4>Phone</h4>
+              <p><a href="tel:+917389286618">+91 7389286618</a></p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fab fa-linkedin"></i>
+            <div>
+              <h4>LinkedIn</h4>
+              <p>
+                <a
+                  href="https://www.linkedin.com/in/shivam-parmar-dev/"
+                  target="_blank"
+                  >linkedin.com/in/shivam-parmar-dev</a
+                >
+              </p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fab fa-github"></i>
+            <div>
+              <h4>GitHub</h4>
+              <p>
+                <a href="https://github.com/shivaaay332/" target="_blank"
+                  >github.com/shivaaay332</a
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <form
+          class="contact-form"
+          action="https://formspree.io/f/xwvnwryy"
+          method="POST"
+        >
+          <input
+            type="text"
+            name="name"
+            placeholder="Your Full Name"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Your Email Address"
+            required
+          />
+          <input type="text" name="subject" placeholder="Subject" />
+          <textarea
+            name="message"
+            rows="5"
+            placeholder="Write your message here..."
+            required
+          ></textarea>
+          <button type="submit" class="btn btn-primary" style="width: 100%">
+            Send Message
+            <i class="fas fa-paper-plane" style="margin-left: 5px"></i>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2026 Shivam Parmar. Built with modern web technologies.</p>
+    </footer>
+
+    <script>
+      // Mobile Navigation Toggle
+      const hamburger = document.querySelector(".hamburger");
+      const navActions = document.querySelector(".nav-actions");
+      const navLinks = document.querySelectorAll(".nav-links a");
+
+      hamburger.addEventListener("click", () => {
+        navActions.classList.toggle("active");
       });
-    }, { threshold: 0.1 });
-    
-    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-  </script>
-</body>
+
+      navLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          navActions.classList.remove("active");
+        });
+      });
+
+      // Simple Scroll Reveal Animation
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("active");
+              revealObserver.unobserve(entry.target); // Play animation only once
+            }
+          });
+        },
+        { threshold: 0.1 },
+      );
+
+      document
+        .querySelectorAll(".reveal")
+        .forEach((el) => revealObserver.observe(el));
+    </script>
+  </body>
 </html>
